@@ -1,0 +1,18 @@
+/* src/App.css */
+
+.app-layout {
+  display: flex;
+  position: relative; /* This is the key for positioning the sidebar */
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.main-content {
+  flex-grow: 1;
+  background-color: #ffffff;
+  /* Add padding to the left to make space for the collapsed sidebar */
+  /* Adjust '60px' to match your collapsed sidebar's width */
+  padding-left: 60px; 
+  transition: padding-left 0.3s ease; /* Optional: smooth transition */
+}

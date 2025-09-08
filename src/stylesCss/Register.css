@@ -1,0 +1,115 @@
+/* Overlay */
+.register-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* dark background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Card */
+.register-card {
+  position: relative;   /* Needed for close button positioning */
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 350px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Heading */
+.register-heading {
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #222;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Form */
+.register-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Labels */
+.register-form label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: #333;
+}
+
+/* Inputs */
+.register-form input {
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.register-form input:focus {
+  border-color: #0e2b40;
+  box-shadow: 0 0 5px rgba(14, 43, 64, 0.3);
+  outline: none;
+}
+
+/* Register Button */
+.register-btn {
+  padding: 0.8rem;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(45deg, #061b31, #0e2b40);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.register-btn:hover {
+  opacity: 0.9;
+}
+
+.register-btn:active {
+  transform: scale(0.97); /* click effect */
+}
+
+/* Close Button */
+.register-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: #444;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.register-close-btn:hover {
+  transform: rotate(90deg);
+  color: #000;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

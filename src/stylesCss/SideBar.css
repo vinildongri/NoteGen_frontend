@@ -1,0 +1,94 @@
+/* src/stylesCss/SideBar.css */
+
+.sidebar {
+  /* --- Core Positioning Changes --- */
+  position: absolute; /* Lifts the sidebar out of the document flow */
+  top: 0;
+  left: 0;
+  height: 100vh; /* Make it full height */
+  z-index: 10;   /* Ensure it's on top of other content */
+  
+  /* --- Styling & Transition --- */
+  display: flex;
+  flex-direction: column;
+  background-color: #f0f4f9;
+  transition: width 0.3s ease-in-out; /* Smooth expansion/collapse */
+  overflow: hidden;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Optional: nice shadow effect */
+}
+
+/* --- State-dependent Widths --- */
+.sidebar.collapsed {
+  width: 60px; /* Adjust as needed */
+}
+
+.sidebar:not(.collapsed) {
+  width: 250px; /* Adjust as needed */
+}
+
+
+/* --- Rest of your styles (can remain mostly the same) --- */
+.sidebar-top, .sidebar-bottom {
+  padding: 15px;
+}
+
+.sidebar-main {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.sidebar-icon-button, .new-chat-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.new-chat-button {
+  background-color: #dde3ea;
+  margin: 10px 5px;
+  white-space: nowrap; /* Prevents text from wrapping during transition */
+}
+
+.new-chat-button span {
+  margin-left: 10px;
+}
+
+.section-title {
+  font-weight: 500;
+  padding: 0 15px 10px 15px;
+  color: #5f6368;
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+
+.menu-item:hover {
+  background-color: #e8e8e8;
+}
+
+.menu-item .icon {
+  margin-right: 15px;
+}
+
+.recent-item {
+  padding: 5px 15px;
+  font-size: 0.9em;
+  color: #3c4043;
+}

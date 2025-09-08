@@ -1,0 +1,85 @@
+/* Setting.css */
+
+/* Overlay */
+.setting-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* dark overlay for focus */
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Card */
+.setting-card {
+  background: linear-gradient(145deg, #ffffff, #e6f0f7); /* soft gradient for elegance */
+  border-radius: 15px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); /* subtle shadow */
+  width: 300px;
+  padding: 30px 20px;
+  position: relative;
+  color: #1a1a1a; /* dark text for readability */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-left: 100px;
+  margin-top: 350px;
+}
+
+/* Close Button */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #555; /* neutral grey */
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.close-btn:hover {
+  color: #ff4c4c; /* red highlight on hover */
+}
+
+/* Title */
+.setting-title {
+  text-align: center;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #cbd5e1; /* light divider */
+  padding-bottom: 10px;
+  color: #0b3d91; /* deep blue for title */
+  font-weight: 600;
+}
+
+/* List */
+.setting-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* List Items */
+.setting-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  color: #1a1a1a;
+}
+
+.setting-item:hover {
+  background: #cde6f7; /* soft blue hover */
+  transform: translateX(5px);
+}
+
+/* Icons */
+.icon {
+  font-size: 1.2rem;
+  color: #0b3d91; /* deep blue icons for style */
+}
