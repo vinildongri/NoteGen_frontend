@@ -12,6 +12,7 @@ import {
   FiCheck,
 } from "react-icons/fi";
 import SearchPdf from "./SearchPdf.jsx";
+import { PDF_SUMMARY_HEADING } from "../constants.jsx";
 // import "../stylesCss/SearchPdf.css";
 
 // ✅ Lazy load SyntaxHighlighter after imports
@@ -196,6 +197,7 @@ const MessageRow = React.memo(({ msg }) => {
 // ========================================================================== //
 const ChatInput = () => {
   const [text, setText] = useState("");
+  const [pdfText, setPdfText] = useState("");
   const [messages, setMessages] = useState([]);
 
   const [createNotes, { isLoading, data, error }] = useCratenotesMutation();
@@ -268,6 +270,20 @@ const ChatInput = () => {
   };
 
   const [showSearchPdf, setShowSearchPdf] = useState(false);
+
+  useEffect(() => {
+    if (pdfText) {
+      setText(pdfText);
+      setPdfText("");
+    }
+  }, [pdfText]);
+
+  useEffect(() => {
+    if (text && text.includes(PDF_SUMMARY_HEADING)) {
+      console.log({text})
+      handleSubmit();
+    }
+  }, [text]);
 
   return (
     <>
@@ -357,7 +373,10 @@ const ChatInput = () => {
 
     {/* SearchPdf */}
      { showSearchPdf && 
-        <SearchPdf onClose={ () => setShowSearchPdf(false)}/>
+        <SearchPdf 
+          onClose={ () => setShowSearchPdf(false)}  
+          setPdfText={setPdfText}
+        />
      }
 
 

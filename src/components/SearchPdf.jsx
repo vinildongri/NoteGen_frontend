@@ -1,8 +1,29 @@
 import React from "react";
 import "../stylesCss/SearchPdf.css";
 import { FiArrowUp } from "react-icons/fi";
+import extract from "react-pdftotext";
+import { PDF_SUMMARY_HEADING } from "../constants";
+import toast from "react-hot-toast";
 
-const SearchPdf = ({ onClose }) => {
+const SearchPdf = ({ onClose, setPdfText }) => {
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.type === "application/pdf") {
+      try {
+        const text = await extract(file);
+        setPdfText(PDF_SUMMARY_HEADING + text);
+        onClose();
+      } catch (error) {
+        console.error("Failed to extract text from PDF:", error);
+        toast.error("Could not read PDF. Please try another file.");
+      }
+    } else {
+      toast.error("Please upload a valid PDF file.");
+    }
+  };
+
   return (
     <div className="pdf-overlay">
       <div className="pdf-modal">
@@ -20,7 +41,13 @@ const SearchPdf = ({ onClose }) => {
 
         {/* Upload Box */}
         <div className="pdf-upload-box">
-          <input type="file" id="file-upload" hidden />
+          <input
+            type="file"
+            id="file-upload"
+            hidden
+            accept=".pdf"
+            onChange={handleFileChange}
+          />
 
           {/* ✅ Arrow is clickable */}
           <label htmlFor="file-upload" className="upload-label">
@@ -39,7 +66,7 @@ const SearchPdf = ({ onClose }) => {
           <div className="m-4"></div>
 
           <p className="upload-types">
-            Supported file types: PDF, .txt, Markdown, Audio (e.g. mp3)
+            Supported file types: PDF (text-based only)
           </p>
         </div>
 
