@@ -23,7 +23,7 @@ const Setting = ({ onClose, onLogin, onOpenProfile }) => {
   const logoutHandler = () => {
     logout();
     toast.success("Logged out successfully");
-    setTimeout(()=>{window.location.reload()}, 500);
+    setTimeout(()=>{window.location.reload()}, 1000);
   };
 
   return (
