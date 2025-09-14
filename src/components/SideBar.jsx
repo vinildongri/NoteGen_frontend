@@ -8,6 +8,8 @@ import Profile from "./user/Profile";
 import { useGetMeQuery } from "../redux/api/userApi";
 import UpdateProfile from "./user/UpdateProfile";
 import UpdatePassword from "./user/UpdatePassword";
+import ForgotPassword from "./user/ForgotPassword";
+import "../stylesCss/ForgotPassword.css";
 
 const Sidebar = () => {
   // const { user } = useSelector((state) => state.auth); // From Redux 
@@ -23,8 +25,14 @@ const Sidebar = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
   const [showUpdatePassword, setShowUpdatePassword] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
-  const HandeUpdatePassword = () => {
+  const HandleFrogottPassword = () => {
+    setShowForgotPassword(true);
+    setShowLogin(false);
+  }
+
+  const HandleUpdatePassword = () => {
     setShowUpdatePassword(true);
     setShowProfile(false);
   };
@@ -123,6 +131,7 @@ const Sidebar = () => {
         <Login 
           onClose={ () => setShowLogin(false)}
           onNewUSer={ handleRegisterClick }
+          onForgotPassword={ HandleFrogottPassword }
       />}
 
       {/* Register Card */}
@@ -137,7 +146,7 @@ const Sidebar = () => {
           user={user} // from Redux
           onClose={() => setShowProfile(false)}
           onUpdate={handleUpdateProfile}
-          onOpenUpdatePasssword={ HandeUpdatePassword }
+          onOpenUpdatePasssword={ HandleUpdatePassword }
         />
       }
 
@@ -149,6 +158,11 @@ const Sidebar = () => {
       {/* Update Password card */}
       { showUpdatePassword && 
         <UpdatePassword onClose={ () => setShowUpdatePassword(false) } />
+      }
+
+      {/* Forgot Password */}
+      { showForgotPassword && 
+        <ForgotPassword onClose={ () => setShowForgotPassword(false) }/>
       }
 
     </>

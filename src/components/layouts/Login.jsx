@@ -4,7 +4,7 @@ import "../../stylesCss/Login.css";
 import { useLoginMutation } from "../../redux/api/authApi";
 import toast from "react-hot-toast";
 
-const Login = ({ onClose, onNewUSer }) => {
+const Login = ({ onClose, onNewUSer, onForgotPassword }) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -64,7 +64,7 @@ const Login = ({ onClose, onNewUSer }) => {
             onChange={ (e) => setPassword(e.target.value)}
           />
 
-          <p className="login-link right-align pt-0 mt-0 mb-3">Forgot Password</p>
+          <p className="login-link right-align pt-0 mt-0 mb-3" onClick={ onForgotPassword }>Forgot Password</p>
 
           <button 
             type="submit" 

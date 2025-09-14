@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../stylesCss/UpdatePassword.css";
-import { useUpdatePasswordMutation } from "../../redux/api/authApi";
+import { useUpdatePasswordMutation } from "../../redux/api/userApi";
 import toast from "react-hot-toast";
 
 const UpdatePassword = ( {onClose} ) => {

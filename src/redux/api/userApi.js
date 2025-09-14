@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setIsAuthenticated, setUser } from "../features/userSlice";
+import ResetPassword from "../../components/user/ResetPassword";
 
 export const userApi = createApi({
     reducerPath: "userApi",
@@ -22,7 +23,32 @@ export const userApi = createApi({
         //         }
         //     }
         }),
+
+        updatePassword: builder.mutation({
+            query: (body) => ({
+                url: "/password/update",
+                method: "PUT",
+                body,
+            }),
+        }),
+
+        forgotPassword: builder.mutation({
+            query: (body) => ({
+                url: "/password/forgot",
+                method: "POST",
+                body,
+            }),
+        }),
+
+        resetPassword: builder.mutation({
+            query: ({ token, body}) => ({
+                url: `/password/reset/${token}`,
+                method: "PUT",
+                body,
+            }),
+        }),
+
     }),
 });
 
-export const { useGetMeQuery } = userApi;
+export const { useGetMeQuery, useUpdatePasswordMutation, useForgotPasswordMutation, useResetPasswordMutation } = userApi;

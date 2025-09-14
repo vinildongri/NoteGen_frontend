@@ -4,6 +4,7 @@ import "../../stylesCss/Setting.css";
 import toast from "react-hot-toast";
 import { useGetMeQuery } from "../../redux/api/userApi";
 import { useLazyLogoutQuery } from "../../redux/api/authApi";
+import DarkModeToggle from "../DarkModeToggle";
 
 const Setting = ({ onClose, onLogin, onOpenProfile }) => {
 
@@ -59,7 +60,7 @@ const Setting = ({ onClose, onLogin, onOpenProfile }) => {
             )}
 
             <li className="setting-item">
-              <FiMoon className="icon" /> <span>Theme</span>
+              <FiMoon className="icon" /> <DarkModeToggle />
             </li>
             <li className="setting-item">
               <FiHelpCircle className="icon" /> <span>Help</span>

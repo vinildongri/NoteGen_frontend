@@ -216,19 +216,30 @@ const ChatInput = () => {
   }, [messages, isLoading]);
 
   useEffect(() => {
-    if (data && data.result) {
-      setMessages((prev) => [
-        ...prev,
-        { role: "bot", content: data.result, name: "NoteGen" },
-      ]);
+  if (data && data.result) {
+    setMessages((prev) => [
+      ...prev,
+      { role: "bot", content: data.result, name: "NoteGen" },
+    ]);
+  }
+
+  if (error) {
+    let errorMessage = "⚠️ Error fetching response";
+
+    if (error.status === "FETCH_ERROR") {
+      errorMessage = "⚠️ Network error – check your connection.";
+    } else if (error.status === 500) {
+      errorMessage = "⚠️ Server error – please try again later.";
+    } else if (error.data?.message) {
+      errorMessage = `⚠️ ${error.data.message}`;
     }
-    if (error) {
-      setMessages((prev) => [
-        ...prev,
-        { role: "bot", content: "⚠️ Error fetching response", name: "NoteGen" },
-      ]);
-    }
-  }, [data, error]);
+
+    setMessages((prev) => [
+      ...prev,
+      { role: "bot", content: errorMessage, name: "NoteGen" },
+    ]);
+  }
+}, [data, error]);
 
   const handleSubmit = async () => {
     if (!text.trim()) return;

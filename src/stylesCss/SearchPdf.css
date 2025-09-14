@@ -34,12 +34,12 @@
 .pdf-close {
   background: none;
   border: none;
-  color: #bbb;
+  color: #080606;
   font-size: 1.5rem;
   cursor: pointer;
 }
 .pdf-close:hover {
-  color: #fff;
+  color: #665e5e;
 }
 
 .pdf-subtitle {
@@ -51,32 +51,61 @@
 
 /* Upload box */
 .pdf-upload-box {
-  border: 2px dashed #444;
+  border: 2px dashed #c0b7b7;
   border-radius: 22px;
   text-align: center;
   padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
+/* Only clickable part */
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0; /* ✅ no gap between arrow + text */
+  cursor: pointer;
+}
+
 .upload-icon {
   font-size: 2rem;
-  cursor: pointer;
-  margin-bottom: 10px;
+  color: white;               /* arrow color */
+  background-color: #4ea3ff;  /* default background */
+  border-radius: 50%;
+  width: 50px;                /* circle size */
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;         /* tiny spacing from text */
 }
+.upload-icon:hover {
+  background-color: #9ec1e6;  /* hover background */
+}
+.upload-icon svg {
+  display: block;
+}
+
 .upload-title {
   font-weight: bold;
   margin: 0;
 }
 .upload-hint {
   color: #aaa;
-  font-size: 0.85rem;
+  font-size: 1.1rem;
+  margin: 0; /* ✅ removed extra spacing */
 }
 .choose-file {
   color: #4ea3ff;
   cursor: pointer;
 }
 .upload-types {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #777;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 /* Fade-in animation */

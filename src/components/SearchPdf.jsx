@@ -1,5 +1,6 @@
 import React from "react";
 import "../stylesCss/SearchPdf.css";
+import { FiArrowUp } from "react-icons/fi";
 
 const SearchPdf = ({ onClose }) => {
   return (
@@ -20,17 +21,26 @@ const SearchPdf = ({ onClose }) => {
         {/* Upload Box */}
         <div className="pdf-upload-box">
           <input type="file" id="file-upload" hidden />
-          <label htmlFor="file-upload">
-            <div className="upload-icon ">⬆</div>
-            <p className="upload-title">Upload sources</p>
-            <p className="upload-hint">
-              Drag & drop or <span className="choose-file">choose file</span> to upload
-            </p>
-            <div className="sizw mt-5"></div>
-            <p className="upload-types">
-              Supported file types: PDF, .txt, Markdown, Audio (e.g. mp3)
-            </p>
+
+          {/* ✅ Arrow is clickable */}
+          <label htmlFor="file-upload" className="upload-label">
+            <div className="upload-icon"><FiArrowUp /></div>
           </label>
+
+          {/* ❌ Not clickable */}
+          <p className="upload-title text-black">Upload sources</p>
+          <p className="upload-hint mt-3">
+            Drag & drop or{" "}
+            {/* ✅ Only this span is clickable */}
+            <label htmlFor="file-upload" className="choose-file">choose file</label>{" "}
+            to upload
+          </p>
+
+          <div className="m-4"></div>
+
+          <p className="upload-types">
+            Supported file types: PDF, .txt, Markdown, Audio (e.g. mp3)
+          </p>
         </div>
 
       </div>
