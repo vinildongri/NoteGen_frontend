@@ -20,8 +20,8 @@ const Setting = ({ onClose, onLogin, onOpenProfile }) => {
 
   const [logout] = useLazyLogoutQuery();
   
-  const logoutHandler = () => {
-    logout();
+  const logoutHandler = async () => {
+    await logout();
     toast.success("Logged out successfully");
     setTimeout(()=>{window.location.reload()}, 1000);
   };

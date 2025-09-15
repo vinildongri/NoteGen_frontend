@@ -40,6 +40,7 @@ export const authApi = createApi({
 
         logout: builder.query({
             query: () => "/logout",
+            method: "POST",
             credentials: "include",
         }),
         
