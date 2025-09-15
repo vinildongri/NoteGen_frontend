@@ -38,10 +38,11 @@ export const authApi = createApi({
             },
         }),
 
-        logout: builder.query({
-            query: () => "/logout",
-            method: "POST",
-            credentials: "include",
+        logout: builder.mutation({
+            query: () => ({
+                url: "/logout",
+                method: "GET",
+            }),
         }),
         
         updateUser: builder.mutation({
@@ -59,7 +60,7 @@ export const authApi = createApi({
 export const { 
     useLoginMutation,
     useRegisterMutation, 
-    useLazyLogoutQuery, 
+    useLogoutMutation, 
     useUpdateUserMutation,
     // useUpdatePasswordMutation,
 } = authApi;

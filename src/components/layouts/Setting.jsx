@@ -3,7 +3,7 @@ import { FiX, FiUser, FiLogIn, FiLogOut, FiMoon, FiHelpCircle } from "react-icon
 import "../../stylesCss/Setting.css";
 import toast from "react-hot-toast";
 import { useGetMeQuery } from "../../redux/api/userApi";
-import { useLazyLogoutQuery } from "../../redux/api/authApi";
+import { useLogoutMutation } from "../../redux/api/authApi";
 import DarkModeToggle from "../DarkModeToggle";
 
 const Setting = ({ onClose, onLogin, onOpenProfile }) => {
@@ -18,20 +18,18 @@ const Setting = ({ onClose, onLogin, onOpenProfile }) => {
   const { data: meData, isLoading } = useGetMeQuery();
   const user = meData?.user;
 
-  const [logout] = useLazyLogoutQuery();
-  
-  const logoutHandler = async () => {
-    // await logout();
-    // toast.success("Logged out successfully");
-    // setTimeout(()=>{window.location.reload()}, 1000);
-    try {
-    await logout().unwrap();
-    toast.success("Logged out successfully");
-    setTimeout(()=>{window.location.reload()}, 1000);
-  } catch (error) {
-    toast.error("Logout failed");
-  }
+  // const [logout] = useLazyLogoutQuery();
+  const [logout, { isLoading: logoutLoading }] = useLogoutMutation();
 
+  const logoutHandler = async () => {
+    try {
+      await logout().unwrap(); // unwrap gives you clean error handling
+      toast.success("Logged out successfully");
+      setTimeout(()=>{window.location.reload()},1000);
+    } catch (err) {
+      toast.error("Logout failed");
+      console.error(err);
+    }
   };
 
   return (
