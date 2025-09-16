@@ -19,7 +19,7 @@ const Setting = ({ onClose, onLogin, onOpenProfile }) => {
   const user = meData?.user;
 
   // const [logout] = useLazyLogoutQuery();
-  const [logout, { isLoading: logoutLoading }] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
 
   const logoutHandler = async () => {
     try {

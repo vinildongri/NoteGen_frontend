@@ -1,28 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!-- data-bs-theme="dark" -->
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+
+    <!-- ✅ Makes site responsive on mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
       content="NoteGen creates quick notes from PDFs"
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- ✅ Bootstrap CSS for responsive design -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
 
-    <!-- Bootstrap Icons -->
+    <!-- ✅ Bootstrap Icons -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
       rel="stylesheet"
     />
 
-
+    <!-- ✅ Custom font (Amazon Ember) -->
     <link
       href="//db.onlinewebfonts.com/c/157c6cc36dd65b1b2adc9e7f3329c761?family=Amazon+Ember"
       rel="stylesheet"
@@ -31,10 +36,14 @@
 
     <title>NoteGen creates quick notes from PDFs</title>
   </head>
+
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <!-- ✅ React will mount your components here -->
     <div id="root"></div>
 
+    <!-- ✅ Bootstrap JS bundle (for modals, dropdowns, etc.) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
