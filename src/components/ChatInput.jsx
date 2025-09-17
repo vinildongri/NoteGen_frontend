@@ -8,20 +8,17 @@ import {
   FiArrowUp,
   FiMic,
   FiSliders,
-  FiCopy,
-  FiCheck,
 } from "react-icons/fi";
 import SearchPdf from "./SearchPdf.jsx";
 import { PDF_SUMMARY_HEADING } from "../constants.jsx";
-// import "../stylesCss/SearchPdf.css";
 
-// ✅ Lazy load SyntaxHighlighter after imports
+// ✅ Lazy load SyntaxHighlighter
 const SyntaxHighlighter = lazy(() =>
   import("react-syntax-highlighter").then((mod) => ({ default: mod.Prism }))
 );
 
 // ========================================================================== //
-// ✅ Standalone CodeBlock Component with Copy Button                         //
+// ✅ ChatGPT-Style CodeBlock Component                                       //
 // ========================================================================== //
 const CodeBlock = ({ className, children }) => {
   const [isCopied, setIsCopied] = useState(false);
@@ -42,52 +39,41 @@ const CodeBlock = ({ className, children }) => {
 
   return (
     <div style={{ position: "relative", margin: "1em 0" }}>
-      <div
+      {/* Copy button top-right */}
+      <button
+        onClick={handleCopy}
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "8px",
-          background: "#2d2d2d",
+          position: "absolute",
+          top: "8px",
+          right: "12px",
+          background: "rgba(0,0,0,0.6)",
+          border: "1px solid #444",
+          borderRadius: "4px",
           color: "#ccc",
-          fontSize: "0.9em",
-          borderTopLeftRadius: "8px",
-          borderTopRightRadius: "8px",
+          fontSize: "0.8em",
+          padding: "2px 6px",
+          cursor: "pointer",
+          zIndex: 2,
         }}
       >
-        <span>{language}</span>
-        <button
-          onClick={handleCopy}
-          style={{
-            background: isCopied ? "#28a745" : "#555",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            padding: "4px 8px",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            gap: "4px",
-          }}
-        >
-          {isCopied ? <FiCheck size={14} /> : <FiCopy size={14} />}
-          {isCopied ? "Copied!" : "Copy code"}
-        </button>
-      </div>
+        {isCopied ? "Copied!" : "Copy"}
+      </button>
 
-      {/* ✅ Lazy loaded SyntaxHighlighter */}
+      {/* Code block */}
       <Suspense fallback={<div style={{ padding: "12px" }}>Loading code...</div>}>
         <SyntaxHighlighter
-          style={oneDark}
           language={language}
-          PreTag="div"
-          wrapLongLines={true}
+          style={oneDark}
           customStyle={{
             margin: 0,
+            borderRadius: "8px",
+            fontSize: "0.9em",
             padding: "16px",
-            borderBottomLeftRadius: "8px",
-            borderBottomRightRadius: "8px",
+            maxHeight: "400px",
+            overflowX: "auto",
+            overflowY: "auto",
           }}
+          wrapLongLines={false}
         >
           {codeString}
         </SyntaxHighlighter>
@@ -139,7 +125,7 @@ const TypingMarkdown = ({ text }) => {
   return (
     <ReactMarkdown
       components={{
-        code({ node, inline, className, children, ...props }) {
+        code({ inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
           return !inline && match ? (
             <CodeBlock className={className}>{children}</CodeBlock>
@@ -167,7 +153,7 @@ const TypingMarkdown = ({ text }) => {
 };
 
 // ========================================================================== //
-// ✅ Memoized MessageRow                                                     //
+// ✅ MessageRow                                                              //
 // ========================================================================== //
 const MessageRow = React.memo(({ msg }) => {
   return (
@@ -199,11 +185,13 @@ const ChatInput = () => {
   const [text, setText] = useState("");
   const [pdfText, setPdfText] = useState("");
   const [messages, setMessages] = useState([]);
+  const [showSearchPdf, setShowSearchPdf] = useState(false);
 
   const [createNotes, { isLoading, data, error }] = useCratenotesMutation();
   const textareaRef = useRef(null);
   const messagesEndRef = useRef(null);
 
+  // auto resize textarea
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -211,37 +199,39 @@ const ChatInput = () => {
     }
   }, [text]);
 
+  // scroll to bottom
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, isLoading]);
 
+  // handle API responses
   useEffect(() => {
-  if (data && data.result) {
-    setMessages((prev) => [
-      ...prev,
-      { role: "bot", content: data.result, name: "NoteGen" },
-    ]);
-  }
-
-  if (error) {
-    let errorMessage = "⚠️ Error fetching response";
-
-    if (error.status === "FETCH_ERROR") {
-      errorMessage = "⚠️ Network error – check your connection.";
-    } else if (error.status === 500) {
-      errorMessage = "⚠️ Server error – please try again later.";
-    } else if (error.data?.message) {
-      errorMessage = `⚠️ ${error.data.message}`;
+    if (data?.result) {
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", content: data.result, name: "NoteGen" },
+      ]);
     }
 
-    setMessages((prev) => [
-      ...prev,
-      { role: "bot", content: errorMessage, name: "NoteGen" },
-    ]);
-  }
-}, [data, error]);
+    if (error) {
+      let errorMessage = "⚠️ Error fetching response";
+
+      if (error.status === "FETCH_ERROR") {
+        errorMessage = "⚠️ Network error – check your connection.";
+      } else if (error.status === 500) {
+        errorMessage = "⚠️ Server error – please try again later.";
+      } else if (error.data?.message) {
+        errorMessage = `⚠️ ${error.data.message}`;
+      }
+
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", content: errorMessage, name: "NoteGen" },
+      ]);
+    }
+  }, [data, error]);
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
@@ -269,8 +259,6 @@ const ChatInput = () => {
     }
   };
 
-  const [showSearchPdf, setShowSearchPdf] = useState(false);
-
   useEffect(() => {
     if (pdfText) {
       setText(pdfText);
@@ -280,106 +268,106 @@ const ChatInput = () => {
 
   useEffect(() => {
     if (text && text.includes(PDF_SUMMARY_HEADING)) {
-      console.log({text})
       handleSubmit();
     }
   }, [text]);
 
   return (
     <>
-    <div
-      className={`chat-input-container ${
-        messages.length === 0 ? "centered" : ""
-      }`}
-    >
-      {messages.length === 0 && (
-        <div className="welcome-screen">
-          <h1
-            style={{
-              background:
-                "linear-gradient(to right, #0062ffff, #4289fcff, #6b9ff4ff)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              padding: "20px",
-              fontWeight: "bold",
-            }}
-          >
-            How can I help you today?
-          </h1>
-        </div>
-      )}
-
-      <div className="messages-box">
-        {messages.map((msg, idx) => (
-          <MessageRow key={idx} msg={msg} />
-        ))}
-
-        {isLoading && (
-          <div className="chat-row bot-row">
-            <div className="avatar bot-avatar">
-              <span className="avatar-letter">N</span>
-              <span className="avatar-ring"></span>
-            </div>
-            <div className="bubble bot-bubble">
-              <span className="loading-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-              </span>
-            </div>
+      <div
+        className={`chat-input-container ${
+          messages.length === 0 ? "centered" : ""
+        }`}
+      >
+        {messages.length === 0 && (
+          <div className="welcome-screen">
+            <h1
+              style={{
+                background:
+                  "linear-gradient(to right, #0062ffff, #4289fcff, #6b9ff4ff)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                padding: "20px",
+                fontWeight: "bold",
+              }}
+            >
+              How can I help you today?
+            </h1>
           </div>
         )}
-        <div ref={messagesEndRef} />
-      </div>
 
-      <div className="input-wrapper">
-        <textarea
-          ref={textareaRef}
-          rows={1}
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Ask NoteGen"
-          className="chat-textarea"
-        />
-        <div className="button-bar">
-          <div className="left-icons">
-            <button className="icon-button" onClick={ () => setShowSearchPdf(true) }>
-              <FiPlus size={22} />
-            </button>
-            <button className="icon-button tools-button">
-              <FiSliders size={20} style={{ transform: "rotate(90deg)" }} />
-              <span>Tools</span>
-            </button>
-          </div>
-          <div className="right-icon">
-            {text ? (
+        <div className="messages-box">
+          {messages.map((msg, idx) => (
+            <MessageRow key={idx} msg={msg} />
+          ))}
+
+          {isLoading && (
+            <div className="chat-row bot-row">
+              <div className="avatar bot-avatar">
+                <span className="avatar-letter">N</span>
+                <span className="avatar-ring"></span>
+              </div>
+              <div className="bubble bot-bubble">
+                <span className="loading-dots">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </span>
+              </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+
+        <div className="input-wrapper">
+          <textarea
+            ref={textareaRef}
+            rows={1}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Ask NoteGen"
+            className="chat-textarea"
+          />
+          <div className="button-bar">
+            <div className="left-icons">
               <button
-                onClick={handleSubmit}
-                className="icon-button send-button"
-                disabled={isLoading}
+                className="icon-button"
+                onClick={() => setShowSearchPdf(true)}
               >
-                <FiArrowUp size={22} />
+                <FiPlus size={22} />
               </button>
-            ) : (
-              <button className="icon-button">
-                <FiMic size={22} /> 
+              <button className="icon-button tools-button">
+                <FiSliders size={20} style={{ transform: "rotate(90deg)" }} />
+                <span>Tools</span>
               </button>
-            )}
+            </div>
+            <div className="right-icon">
+              {text ? (
+                <button
+                  onClick={handleSubmit}
+                  className="icon-button send-button"
+                  disabled={isLoading}
+                >
+                  <FiArrowUp size={22} />
+                </button>
+              ) : (
+                <button className="icon-button">
+                  <FiMic size={22} />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    {/* SearchPdf */}
-     { showSearchPdf && 
-        <SearchPdf 
-          onClose={ () => setShowSearchPdf(false)}  
+      {/* SearchPdf Modal */}
+      {showSearchPdf && (
+        <SearchPdf
+          onClose={() => setShowSearchPdf(false)}
           setPdfText={setPdfText}
         />
-     }
-
-
+      )}
     </>
   );
 };
