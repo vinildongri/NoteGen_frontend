@@ -1,33 +1,37 @@
 /* src/stylesCss/SideBar.css */
 
+/* ========================================= */
+/* ====   DESKTOP STYLES (DEFAULT)    ==== */
+/* ========================================= */
+
 .sidebar {
-  /* --- Core Positioning Changes --- */
-  position: absolute; /* Lifts the sidebar out of the document flow */
-  top: 0;
-  left: 0;
-  height: 100vh; /* Make it full height */
-  z-index: 10;   /* Ensure it's on top of other content */
-  
-  /* --- Styling & Transition --- */
+  /* position: relative works best with a flexbox parent (.app-layout).
+    It keeps the sidebar in the flow, pushing main content aside. 
+  */
+  position: relative; 
+  height: 100vh;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   background-color: #f0f4f9;
-  transition: width 0.3s ease-in-out; /* Smooth expansion/collapse */
-  overflow: hidden;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Optional: nice shadow effect */
+  overflow-x: hidden; /* Hide content when collapsing */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+
+  /* MODIFIED: Transition now includes 'transform' for the mobile slide animation */
+  transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
-/* --- State-dependent Widths --- */
+/* Width for the collapsed state on desktop (icon-only view) */
 .sidebar.collapsed {
-  width: 60px; /* Adjust as needed */
+  width: 80px; 
 }
 
+/* Width for the expanded state on desktop (hovered) */
 .sidebar:not(.collapsed) {
-  width: 250px; /* Adjust as needed */
+  width: 260px;
 }
 
-
-/* --- Rest of your styles (can remain mostly the same) --- */
+/* --- Core Sidebar Sections --- */
 .sidebar-top, .sidebar-bottom {
   padding: 15px;
 }
@@ -37,6 +41,7 @@
   overflow-y: auto;
 }
 
+/* --- Buttons and Menu Items --- */
 .sidebar-icon-button, .new-chat-button {
   background: none;
   border: none;
@@ -76,7 +81,7 @@
   padding: 10px 15px;
   cursor: pointer;
   border-radius: 5px;
-  white-space: nowrap; /* Prevents text from wrapping */
+  white-space: nowrap;
 }
 
 .menu-item:hover {
@@ -91,4 +96,33 @@
   padding: 5px 15px;
   font-size: 0.9em;
   color: #3c4043;
+}
+
+
+/* ==================================================================== */
+/* ====   MOBILE & TABLET STYLES (Screen width < 768px)           ==== */
+/* ==================================================================== */
+@media (max-width: 768px) {
+  
+  /* Override positioning to create an overlay that slides over content */
+  .sidebar {
+    position: fixed;
+    z-index: 2000; /* Ensure it's on top of everything */
+    
+    /* Hide the sidebar off-screen by default on mobile */
+    transform: translateX(-100%);
+  }
+  
+  /* On mobile, the sidebar has a single, fixed width when open.
+     This disables the desktop hover-to-expand effect. */
+  .sidebar,
+  .sidebar.collapsed,
+  .sidebar:not(.collapsed) {
+    width: 280px; 
+  }
+
+  /* This class, added via JavaScript, brings the sidebar into view */
+  .sidebar.open {
+    transform: translateX(0);
+  }
 }

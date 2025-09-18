@@ -1,16 +1,13 @@
+// src/components/ChatInput.jsx
 import React, { useState, useRef, useEffect, Suspense, lazy } from "react";
 import { useCratenotesMutation } from "../redux/api/noteApi.js";
 import "../stylesCss/ChatInput.css";
 import ReactMarkdown from "react-markdown";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import {
-  FiPlus,
-  FiArrowUp,
-  FiMic,
-  FiSliders,
-} from "react-icons/fi";
+import { FiPlus, FiArrowUp, FiMic, FiSliders } from "react-icons/fi";
 import SearchPdf from "./SearchPdf.jsx";
 import { PDF_SUMMARY_HEADING } from "../constants.jsx";
+import { useGetMeQuery } from "../redux/api/userApi.js";
 
 // ✅ Lazy load SyntaxHighlighter
 const SyntaxHighlighter = lazy(() =>
@@ -159,7 +156,7 @@ const MessageRow = React.memo(({ msg }) => {
   return (
     <div className={`chat-row ${msg.role === "user" ? "user-row" : "bot-row"}`}>
       <div
-        className={`avatar ${msg.role === "bot" ? "bot-avatar" : "user-avatar"}`}
+        className={`avatar  ${msg.role === "bot" ? "bot-avatar" : "user-avatar"}`}
       >
         <span className="avatar-letter">
           {msg.name?.[0] || (msg.role === "user" ? "U" : "B")}
@@ -190,6 +187,10 @@ const ChatInput = () => {
   const [createNotes, { isLoading, data, error }] = useCratenotesMutation();
   const textareaRef = useRef(null);
   const messagesEndRef = useRef(null);
+
+  // ✅ Safe user query
+  const { data: meData } = useGetMeQuery();
+  const user = meData?.user || null;
 
   // auto resize textarea
   useEffect(() => {
@@ -238,12 +239,15 @@ const ChatInput = () => {
 
     setMessages((prev) => [
       ...prev,
-      { role: "user", content: text, name: "Vinil" },
+      { role: "user", content: text, name: user?.name || "Guest" },
     ]);
 
     try {
       await createNotes({
-        messages: [...messages, { role: "user", content: text, name: "Vinil" }],
+        messages: [
+          ...messages,
+          { role: "user", content: text, name: user?.name || "Guest" },
+        ],
       }).unwrap();
 
       setText("");
@@ -291,7 +295,7 @@ const ChatInput = () => {
                 fontWeight: "bold",
               }}
             >
-              How can I help you today?
+              How can I help you today{user?.name ? `, ${user.name}` : ""}?
             </h1>
           </div>
         )}

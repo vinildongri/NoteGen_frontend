@@ -1,18 +1,46 @@
 /* src/App.css */
 
+/*
+  Defines the primary layout for the entire application.
+  It's a flex container that places the Sidebar and the .main-content
+  area side-by-side.
+*/
 .app-layout {
   display: flex;
-  position: relative; /* This is the key for positioning the sidebar */
   height: 100vh;
   width: 100vw;
+  background-color: #f0f4f9;
+  /* Prevents the entire browser page from having a scrollbar,
+     as scrolling is handled internally. */
   overflow: hidden;
 }
 
+/*
+  This container acts as a vertical flexbox for the main view.
+  It stacks the <Header> component on top of the .content-area.
+  CRITICAL: This element itself does NOT scroll.
+*/
 .main-content {
-  flex-grow: 1;
-  background-color: #ffffff;
-  /* Add padding to the left to make space for the collapsed sidebar */
-  /* Adjust '60px' to match your collapsed sidebar's width */
-  padding-left: 60px; 
-  transition: padding-left 0.3s ease; /* Optional: smooth transition */
+  flex-grow: 1; /* Allows this container to fill the remaining horizontal space */
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Ensures it takes up the full viewport height */
+}
+
+/*
+  This is the dedicated scrollable wrapper for your page content.
+  It sits below the header and is the ONLY part of the main view that scrolls.
+*/
+.content-area {
+  flex-grow: 1; /* Fills all available vertical space below the header */
+  overflow-y: auto; /* Enables vertical scrolling just for this area */
+  padding: 1.5rem 2rem;
+}
+
+/* --- Responsive Styles for Smaller Screens --- */
+@media (max-width: 768px) {
+  /* Reduce padding on mobile to give content more room */
+  .content-area {
+    padding: 1rem;
+  }
 }
