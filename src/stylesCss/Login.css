@@ -161,3 +161,43 @@
 .login-link:hover {
   color: #0a2a43;
 }
+
+/* ===================== Responsive Login ===================== */
+
+/* Tablets (≤1024px) */
+@media (max-width: 1024px) {
+  .login-card {
+    width: 90%;          /* shrink on tablets */
+    max-width: 380px;
+    padding: 30px 24px;
+  }
+  .login-card h2 { font-size: 1.6rem; }
+  .login-submit-btn { width: 100%; } /* button adapts */
+}
+
+/* Mobiles (≤768px) */
+@media (max-width: 768px) {
+  .login-card {
+    width: 92%;
+    max-width: 350px;
+    padding: 25px 20px;
+  }
+  .login-card h2 { font-size: 1.4rem; }
+  .login-card label { font-size: 0.85rem; }
+  .login-card input { font-size: 0.95rem; height: 34px; }
+  .login-submit-btn { width: 100%; font-size: 0.95rem; }
+  .login-link { font-size: 0.8rem; }
+}
+
+/* Small Mobiles (≤480px) */
+@media (max-width: 480px) {
+  .login-card {
+    width: 95%; 
+    max-width: 360px;
+    padding: 20px 16px;
+  }
+  .login-card h2 { font-size: 1.2rem; margin-bottom: 18px; }
+  .login-card input { font-size: 0.9rem; padding: 0.65rem; height: 32px; }
+  .login-submit-btn { width: 100%; font-size: 0.9rem; padding: 0.7rem; }
+  .login-link { font-size: 0.75rem; }
+}

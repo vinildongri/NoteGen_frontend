@@ -145,12 +145,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       {showLogin && (
         <Login
           onClose={() => setShowLogin(false)}
-          onNewUser={handleRegisterClick}
+          onNewUSer={handleRegisterClick}
           onForgotPassword={handleForgotPassword}
         />
       )}
 
-      {showRegister && <Register onClose={() => setShowRegister(false)} />}
+      {showRegister && 
+        <Register onClose={() => setShowRegister(false)} 
+      />}
 
       {showProfile && (
         <Profile
