@@ -1,0 +1,94 @@
+/* Background overlay */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* Main modal container */
+.login-modal {
+    background-color: #ffffff; /* Changed to white */
+    color: #333; /* Changed to dark gray for readability on white */
+    padding: 2rem;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 0 0 1px #ddd; /* Changed shadow color for white background */
+}
+
+/* Title */
+.login-modal h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+/* Description */
+.login-modal p {
+    font-size: 0.9rem;
+    color: #777; /* Changed to a lighter gray */
+    margin-bottom: 1.5rem;
+}
+
+/* Buttons container */
+.modal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.2rem;
+}
+
+/* Shared button styles */
+.login-button,
+.signup-button {
+    padding: 0.8rem 1rem;
+    border-radius: 999px; /* Pill shape restored */
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    display: block;
+    border: none;
+}
+
+/* Login button */
+.login-button {
+    background-color: #005eff; /* Changed to blue */
+    color: #ffffff; /* Changed to white */
+}
+
+/* .login-button:hover {
+    background-color: #2980b9; 
+} */
+
+/* Sign up button */
+.signup-button {
+    background-color: #ffffff; /* Changed to white */
+    color: #3498db; /* Changed to blue */
+    border: 1px solid #3498db; /* Blue border */
+}
+
+.signup-button:hover {
+    background-color: #e8e8e8; /* Lighter gray hover */
+}
+
+/* Stay logged out */
+.stay-logged-out {
+    background: none;
+    border: none;
+    color: #777; /* Changed to a lighter gray */
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: underline;
+    padding-top: 0.5rem;
+}

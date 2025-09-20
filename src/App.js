@@ -9,17 +9,32 @@ import Sidebar from "./components/SideBar";
 import Header from "./components/layouts/Header";
 import ChatInput from "./components/ChatInput";
 import Avatar from "./components/layouts/Avatar";
+import LoginModal from "./components/layouts/LoginModal";
 
 // CSS
 import "./App.css";
 import "./stylesCss/SideBar.css";
 import "./stylesCss/Header.css";
 import "./stylesCss/ChatInput.css";
+import "./stylesCss/LoginModal.css";
 
 function App({ onManageProfile }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [showAvatar, setShowAvatar] = useState(false);
   const [showSidebarProfile, setShowSidebarProfile] = useState(false); // <- lifted state
+  const [sidebarLoginOpen, setSidebarLoginOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(true);
+  const [sidebarRegisterOpen, setSidebarRegisterOpen] = useState(false);
+
+  const loginModalHandler = () => {
+    setSidebarLoginOpen(true);
+    setShowLoginModal(false);
+  }
+
+  const registerHandler = () => {
+    setSidebarRegisterOpen(true);
+    setShowLoginModal(false);
+  }
 
   const { data } = useGetMeQuery();
   const user = data?.user;
@@ -48,46 +63,65 @@ function App({ onManageProfile }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showAvatar]);
 
-  return (
-    <Router>
-      {isSidebarOpen && <div className="sidebar-overlay" onClick={toggleSidebar}></div>}
+return (
+  <Router>
+    <div className="app-layout">
+      <Sidebar 
+        isOpen={isSidebarOpen} 
+        toggleSidebar={toggleSidebar} 
+        openProfile={showSidebarProfile} 
+        setOpenProfile={setShowSidebarProfile}
+        showLogin={sidebarLoginOpen}       // ✅ pass state
+        setShowLogin={setSidebarLoginOpen}  // ✅ pass setter
+        showRegister={sidebarRegisterOpen}
+        setShowRegister={setSidebarRegisterOpen}
+      />
 
-      <div className="app-layout">
-        <Sidebar 
-          isOpen={isSidebarOpen} 
+      <div className="main-content">
+        <Header 
           toggleSidebar={toggleSidebar} 
-          openProfile={showSidebarProfile} 
-          setOpenProfile={setShowSidebarProfile} // allow Sidebar to close itself
+          user={user} 
+          onAvatarClick={toggleAvatar} 
         />
 
-        <div className="main-content">
-          <Header 
-            toggleSidebar={toggleSidebar} 
-            user={user} 
-            onAvatarClick={toggleAvatar} 
-          />
+        <div className="content-area">
+          <Routes>
+            <Route path="/" 
+              element={
+                <ChatInput 
+                  onLoginClick={() => setSidebarLoginOpen(true)} // pass setter
+                  onSignUpClick={() => setSidebarRegisterOpen(true)}
+                />} 
+            />
+          </Routes>
 
-          <div className="content-area">
-            <Routes>
-              <Route path="/" element={<ChatInput />} />
-            </Routes>
-
-            {showAvatar && 
-              <div ref={avatarRef}>
-                <Avatar 
-                  user={user}
-                  onClose={() => setShowAvatar(false)}
-                  onClickManageProfile={handleManageProfile}
-                />
-              </div>
-            }
-          </div>
+          {showAvatar && 
+            <div ref={avatarRef}>
+              <Avatar 
+                user={user}
+                onClose={() => setShowAvatar(false)}
+                onClickManageProfile={handleManageProfile}
+              />
+            </div>
+          }
         </div>
       </div>
+    </div>
 
-      <Toaster position="top-center" reverseOrder={false} />
-    </Router>
-  );
+    {/* 🔹 Show Login Modal on top of everything */}
+    {!user && showLoginModal && (
+      <LoginModal 
+        // onClickLogin={() => setSidebarLoginOpen(true)}
+        onClickLogin={ loginModalHandler }
+        onClickSignUp={ registerHandler }
+        stayLoggedOut={ ()=> setShowLoginModal(false)}
+      />
+    )}
+
+    <Toaster position="top-center" reverseOrder={false} />
+  </Router>
+);
+
 }
 
 export default App;

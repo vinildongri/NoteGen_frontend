@@ -14,7 +14,8 @@ import ForgotPassword from "./user/ForgotPassword";
 
 import "../stylesCss/ForgotPassword.css";
 
-const Sidebar = ({ isOpen, toggleSidebar, openProfile, setOpenProfile }) => {
+const Sidebar = ({ isOpen, toggleSidebar, openProfile, setOpenProfile, showLogin, setShowLogin, showRegister, setShowRegister }) => {
+  
   const sidebarRef = useRef(null);
   const { data: meData } = useGetMeQuery();
   const user = meData?.user;
@@ -22,8 +23,8 @@ const Sidebar = ({ isOpen, toggleSidebar, openProfile, setOpenProfile }) => {
   // --- Local states ---
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showSetting, setShowSetting] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  const [showRegister, setShowRegister] = useState(false);
+  // const [showLogin, setShowLogin] = useState(false);
+  // const [showRegister, setShowRegister] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
   const [showUpdatePassword, setShowUpdatePassword] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -147,6 +148,7 @@ const Sidebar = ({ isOpen, toggleSidebar, openProfile, setOpenProfile }) => {
           onClose={() => setShowLogin(false)}
           onNewUSer={handleRegisterClick}
           onForgotPassword={() => setShowLogin(false)}
+          // onClickLogin={handleLoginClick}
         />
       )}
 

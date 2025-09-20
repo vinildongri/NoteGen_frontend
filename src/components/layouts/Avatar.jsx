@@ -16,13 +16,13 @@ const Avatar = ({ user, onClose, onClickManageProfile }) => {
       <div className="avatar-initials">{name.charAt(0).toUpperCase()}</div>
 
       <div className="avatar-details">
-        <h3 className="avatar-name">{name}</h3>
+        <h3 className="avatar-name">Hi, {name}!</h3>
         <p className="avatar-email">{email}</p>
       </div>
 
       <div className="avatar-actions">
         <button className="btn" onClick={() => onClickManageProfile?.()}>
-          Manage Profile
+          Manage Your Profile
         </button>
       </div>
     </div>

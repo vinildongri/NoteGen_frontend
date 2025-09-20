@@ -1,26 +1,23 @@
 // src/components/ChatInput.jsx
-import React, { useState, useRef, useEffect, Suspense, lazy } from "react";
+import React, { useState, useRef, useEffect, Suspense, lazy, useCallback } from "react";
 import { useCratenotesMutation } from "../redux/api/noteApi.js";
+import { useGetMeQuery } from "../redux/api/userApi.js";
 import "../stylesCss/ChatInput.css";
 import ReactMarkdown from "react-markdown";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { FiPlus, FiArrowUp, FiMic, FiSliders } from "react-icons/fi";
 import SearchPdf from "./SearchPdf.jsx";
 import { PDF_SUMMARY_HEADING } from "../constants.jsx";
-import { useGetMeQuery } from "../redux/api/userApi.js";
 
-// ✅ Lazy load SyntaxHighlighter
+// Lazy load SyntaxHighlighter
 const SyntaxHighlighter = lazy(() =>
   import("react-syntax-highlighter").then((mod) => ({ default: mod.Prism }))
 );
 
-// ========================================================================== //
-// ✅ ChatGPT-Style CodeBlock Component                                       //
-// ========================================================================== //
+// ======================= CodeBlock Component ======================= //
 const CodeBlock = ({ className, children }) => {
   const [isCopied, setIsCopied] = useState(false);
   const codeString = String(children).replace(/\n$/, "");
-
   const match = /language-(\w+)/.exec(className || "");
   const language = match ? match[1] : "text";
 
@@ -36,7 +33,6 @@ const CodeBlock = ({ className, children }) => {
 
   return (
     <div style={{ position: "relative", margin: "1em 0" }}>
-      {/* Copy button top-right */}
       <button
         onClick={handleCopy}
         style={{
@@ -56,7 +52,6 @@ const CodeBlock = ({ className, children }) => {
         {isCopied ? "Copied!" : "Copy"}
       </button>
 
-      {/* Code block */}
       <Suspense fallback={<div style={{ padding: "12px" }}>Loading code...</div>}>
         <SyntaxHighlighter
           language={language}
@@ -79,9 +74,7 @@ const CodeBlock = ({ className, children }) => {
   );
 };
 
-// ========================================================================== //
-// ✅ Typing + Markdown Component                                             //
-// ========================================================================== //
+// ======================= TypingMarkdown Component ======================= //
 const TypingMarkdown = ({ text }) => {
   const [displayedText, setDisplayedText] = useState("");
   const [isTypingComplete, setIsTypingComplete] = useState(false);
@@ -106,14 +99,7 @@ const TypingMarkdown = ({ text }) => {
 
   if (!isTypingComplete) {
     return (
-      <pre
-        style={{
-          whiteSpace: "pre-wrap",
-          wordWrap: "break-word",
-          margin: 0,
-          fontFamily: "inherit",
-        }}
-      >
+      <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", margin: 0, fontFamily: "inherit" }}>
         <code>{displayedText}</code>
       </pre>
     );
@@ -149,50 +135,42 @@ const TypingMarkdown = ({ text }) => {
   );
 };
 
-// ========================================================================== //
-// ✅ MessageRow                                                              //
-// ========================================================================== //
-const MessageRow = React.memo(({ msg }) => {
-  return (
-    <div className={`chat-row ${msg.role === "user" ? "user-row" : "bot-row"}`}>
-      <div
-        className={`avatar  ${msg.role === "bot" ? "bot-avatar" : "user-avatar"}`}
-      >
-        <span className="avatar-letter">
-          {msg.name?.[0] || (msg.role === "user" ? "U" : "B")}
-        </span>
+// ======================= MessageRow Component ======================= //
+const MessageRow = React.memo(({ msg }) => (
+  <div className={`chat-row ${msg.role === "user" ? "user-row" : "bot-row"}`}>
+    {msg.role === "bot" && (
+      <div className="avatar bot-avatar">
+        <span className="avatar-letter">{msg.name?.[0] || "B"}</span>
       </div>
-      <div
-        className={`bubble ${msg.role === "user" ? "user-bubble" : "bot-bubble"}`}
-      >
-        {msg.role === "bot" ? (
-          <TypingMarkdown text={msg.content} />
-        ) : (
-          <ReactMarkdown>{msg.content}</ReactMarkdown>
-        )}
-      </div>
+    )}
+    <div className={`bubble ${msg.role === "user" ? "user-bubble" : "bot-bubble"}`}>
+      {msg.role === "bot" ? <TypingMarkdown text={msg.content} /> : <ReactMarkdown>{msg.content}</ReactMarkdown>}
     </div>
-  );
-});
+  </div>
+));
 
-// ========================================================================== //
-// ✅ ChatInput Component                                                     //
-// ========================================================================== //
-const ChatInput = () => {
+
+// ======================= ChatInput Component ======================= //
+const ChatInput = ({ onLoginClick, onSignUpClick }) => {
   const [text, setText] = useState("");
   const [pdfText, setPdfText] = useState("");
   const [messages, setMessages] = useState([]);
   const [showSearchPdf, setShowSearchPdf] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
-  const [createNotes, { isLoading, data, error }] = useCratenotesMutation();
+  const [createNotes, { isLoading, data: notesData, error }] = useCratenotesMutation();
   const textareaRef = useRef(null);
   const messagesEndRef = useRef(null);
 
-  // ✅ Safe user query
-  const { data: meData } = useGetMeQuery();
-  const user = meData?.user || null;
+  // Get current user
+  const { data: meData, isLoading: isUserLoading } = useGetMeQuery();
+  const user = meData?.user
+    ? { ...meData.user, isAuthenticated: true }
+    : { name: "Guest", isAuthenticated: false };
 
-  // auto resize textarea
+  const userName = user?.name || "Guest";
+
+  // Auto resize textarea
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -200,61 +178,47 @@ const ChatInput = () => {
     }
   }, [text]);
 
-  // scroll to bottom
+  // Scroll to bottom
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    if (messagesEndRef.current) messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
-  // handle API responses
+  // Handle API responses
   useEffect(() => {
-    if (data?.result) {
-      setMessages((prev) => [
-        ...prev,
-        { role: "bot", content: data.result, name: "NoteGen" },
-      ]);
+    if (notesData?.result) {
+      setMessages((prev) => [...prev, { role: "bot", content: notesData.result, name: "NoteGen" }]);
     }
-
     if (error) {
       let errorMessage = "⚠️ Error fetching response";
-
-      if (error.status === "FETCH_ERROR") {
-        errorMessage = "⚠️ Network error – check your connection.";
-      } else if (error.status === 500) {
-        errorMessage = "⚠️ Server error – please try again later.";
-      } else if (error.data?.message) {
-        errorMessage = `⚠️ ${error.data.message}`;
-      }
-
-      setMessages((prev) => [
-        ...prev,
-        { role: "bot", content: errorMessage, name: "NoteGen" },
-      ]);
+      if (error.status === "FETCH_ERROR") errorMessage = "⚠️ Network error – check your connection.";
+      else if (error.status === 500) errorMessage = "⚠️ Server error – please try again later.";
+      else if (error.data?.message) errorMessage = `⚠️ ${error.data.message}`;
+      setMessages((prev) => [...prev, { role: "bot", content: errorMessage, name: "NoteGen" }]);
     }
-  }, [data, error]);
+  }, [notesData, error]);
 
-  const handleSubmit = async () => {
+  // Soft login prompt after 3 bot messages (only for guests)
+  useEffect(() => {
+    if (isUserLoading) return;
+    if (!user.isAuthenticated) {
+      const botMessages = messages.filter((m) => m.role === "bot").length;
+      if (botMessages >= 2) setShowLoginPrompt(true);
+    } else {
+      setShowLoginPrompt(false);
+    }
+  }, [messages, user.isAuthenticated, isUserLoading]);
+
+  // Handle submit
+  const handleSubmit = useCallback(async () => {
     if (!text.trim()) return;
-
-    setMessages((prev) => [
-      ...prev,
-      { role: "user", content: text, name: user?.name || "Guest" },
-    ]);
-
+    setMessages((prev) => [...prev, { role: "user", content: text, name: user.name }]);
     try {
-      await createNotes({
-        messages: [
-          ...messages,
-          { role: "user", content: text, name: user?.name || "Guest" },
-        ],
-      }).unwrap();
-
+      await createNotes({ messages: [...messages, { role: "user", content: text, name: user.name }] }).unwrap();
       setText("");
     } catch (err) {
       console.log("API Error:", err);
     }
-  };
+  }, [text, messages, user.name, createNotes]);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -271,31 +235,24 @@ const ChatInput = () => {
   }, [pdfText]);
 
   useEffect(() => {
-    if (text && text.includes(PDF_SUMMARY_HEADING)) {
-      handleSubmit();
-    }
-  }, [text]);
+    if (text && text.includes(PDF_SUMMARY_HEADING)) handleSubmit();
+  }, [text, handleSubmit]);
 
   return (
     <>
-      <div
-        className={`chat-input-container ${
-          messages.length === 0 ? "centered" : ""
-        }`}
-      >
+      <div className={`chat-input-container ${messages.length === 0 ? "centered" : ""}`}>
         {messages.length === 0 && (
           <div className="welcome-screen">
             <h1
               style={{
-                background:
-                  "linear-gradient(to right, #0062ffff, #4289fcff, #6b9ff4ff)",
+                background: "linear-gradient(to right, #0062ffff, #4289fcff, #6b9ff4ff)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 padding: "20px",
                 fontWeight: "bold",
               }}
             >
-              How can I help you today{user?.name ? `, ${user.name}` : ""}?
+              How can I help you today{user.isAuthenticated ? `, ${userName}` : ""}?
             </h1>
           </div>
         )}
@@ -320,6 +277,27 @@ const ChatInput = () => {
               </div>
             </div>
           )}
+
+          {showLoginPrompt && (
+            <div className="login-banner">
+              <div className="login-banner-text">
+                <b>You're now using our basic model.</b>
+                <span>To access more intelligence, create an account or log in.</span>
+              </div>
+              <div className="login-banner-buttons mb-0">
+                <button onClick={onLoginClick} className="login-btn">
+                  Log in
+                </button>
+                <button onClick={onSignUpClick} className="signup-btn">
+                  Sign up for free
+                </button>
+              </div>
+              <span className="login-banner-close" onClick={() => setShowLoginPrompt(false)}>
+                ×
+              </span>
+            </div>
+          )}
+
           <div ref={messagesEndRef} />
         </div>
 
@@ -335,10 +313,7 @@ const ChatInput = () => {
           />
           <div className="button-bar">
             <div className="left-icons">
-              <button
-                className="icon-button"
-                onClick={() => setShowSearchPdf(true)}
-              >
+              <button className="icon-button" onClick={() => setShowSearchPdf(true)}>
                 <FiPlus size={22} />
               </button>
               <button className="icon-button tools-button">
@@ -348,11 +323,7 @@ const ChatInput = () => {
             </div>
             <div className="right-icon">
               {text ? (
-                <button
-                  onClick={handleSubmit}
-                  className="icon-button send-button"
-                  disabled={isLoading}
-                >
+                <button onClick={handleSubmit} className="icon-button send-button" disabled={isLoading}>
                   <FiArrowUp size={22} />
                 </button>
               ) : (
@@ -365,13 +336,7 @@ const ChatInput = () => {
         </div>
       </div>
 
-      {/* SearchPdf Modal */}
-      {showSearchPdf && (
-        <SearchPdf
-          onClose={() => setShowSearchPdf(false)}
-          setPdfText={setPdfText}
-        />
-      )}
+      {showSearchPdf && <SearchPdf onClose={() => setShowSearchPdf(false)} setPdfText={setPdfText} />}
     </>
   );
 };

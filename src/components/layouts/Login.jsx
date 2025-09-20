@@ -17,6 +17,7 @@ const Login = ({ onClose, onNewUSer, onForgotPassword }) => {
     }
     if (data) {
       toast.success("Login Successful!");
+      setTimeout(()=>{window.location.reload(true)}, 500);
       onClose(); // close the login card
     }
   }, [error, data, onClose]);
