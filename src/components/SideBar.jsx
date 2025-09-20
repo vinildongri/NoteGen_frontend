@@ -1,5 +1,4 @@
 // src/components/SideBar.js
-
 import React, { useState, useRef, useEffect } from "react";
 import { FiMenu, FiEdit, FiSettings } from "react-icons/fi";
 import { useGetMeQuery } from "../redux/api/userApi";
@@ -15,50 +14,30 @@ import ForgotPassword from "./user/ForgotPassword";
 
 import "../stylesCss/ForgotPassword.css";
 
-const Sidebar = ({ isOpen, toggleSidebar }) => {
+const Sidebar = ({ isOpen, toggleSidebar, openProfile, setOpenProfile }) => {
   const sidebarRef = useRef(null);
   const { data: meData } = useGetMeQuery();
   const user = meData?.user;
 
-  // --- States for Sidebar and Modals ---
+  // --- Local states ---
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showSetting, setShowSetting] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
   const [showUpdatePassword, setShowUpdatePassword] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
 
-  // --- Click outside to close Sidebar (for mobile) ---
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isOpen && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        toggleSidebar();
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen, toggleSidebar]);
-
-  // --- Handlers ---
-  const handleForgotPassword = () => {
-    setShowForgotPassword(true);
-    setShowLogin(false);
-  };
-
   const handleUpdatePassword = () => {
     setShowUpdatePassword(true);
-    setShowProfile(false);
   };
 
   const handleUpdateProfile = () => {
     setShowUpdate(true);
-    setShowProfile(false);
   };
 
   const handleProfileClick = () => {
-    setShowProfile(true);
+    setOpenProfile(true);
     setShowSetting(false);
   };
 
@@ -82,8 +61,18 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     "React Search Bar Code Revi...",
   ];
 
-  // Combine desktop hover + mobile open logic
   const showText = !isCollapsed || isOpen;
+
+  // --- Click outside to close Sidebar ---
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isOpen && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        toggleSidebar();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen, toggleSidebar]);
 
   return (
     <>
@@ -124,7 +113,18 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
         {/* Bottom */}
         <div className="sidebar-bottom">
-          <div className="menu-item" onClick={() => setShowSetting(true)}>
+          <div
+            className="menu-item"
+            onClick={() =>{
+               setShowSetting(true);
+               
+                if (isOpen) {
+                  toggleSidebar(); // close mobile sidebar
+                } else {
+                  setIsCollapsed(true); // collapse sidebar on desktop
+                }
+            }}
+          >
             <span className="icon">
               <FiSettings size={18} />
             </span>
@@ -146,27 +146,23 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         <Login
           onClose={() => setShowLogin(false)}
           onNewUSer={handleRegisterClick}
-          onForgotPassword={handleForgotPassword}
+          onForgotPassword={() => setShowLogin(false)}
         />
       )}
 
-      {showRegister && 
-        <Register onClose={() => setShowRegister(false)} 
-      />}
+      {showRegister && <Register onClose={() => setShowRegister(false)} />}
 
-      {showProfile && (
+      {openProfile && (
         <Profile
           user={user}
-          onClose={() => setShowProfile(false)}
+          onClose={() => setOpenProfile(false)} // close from Sidebar
           onUpdate={handleUpdateProfile}
           onOpenUpdatePasssword={handleUpdatePassword}
         />
       )}
 
       {showUpdate && <UpdateProfile user={user} onClose={() => setShowUpdate(false)} />}
-
       {showUpdatePassword && <UpdatePassword onClose={() => setShowUpdatePassword(false)} />}
-
       {showForgotPassword && <ForgotPassword onClose={() => setShowForgotPassword(false)} />}
     </>
   );
