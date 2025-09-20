@@ -302,3 +302,96 @@ pre::-webkit-scrollbar-thumb:hover { background: #888; }
   /* Keep input bar always visible above keyboard */
   .input-wrapper { position: sticky; bottom: 0; background: #f0f4f9; z-index: 10; }
 }
+
+/* ================= ChatGPT-Style Banner ================= */
+.login-banner {
+  display: flex;
+  justify-content: space-between;  /* text left, buttons right */
+  align-items: center;
+  background-color: #dfecfb;       /* soft pastel */
+  color: #1f1f1f;
+  border-radius: 12px;
+  padding: 10px 14px;              /* slightly reduced padding */
+  margin-bottom: 6px;              /* small gap below banner */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* softer shadow */
+  font-size: 14px;
+  position: relative;
+  gap: 10px;                        /* reduced gap between text & buttons */
+}
+
+/* Text on the left */
+.login-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;                          /* smaller gap between headline & description */
+}
+
+.login-banner-text b {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.login-banner-text span {
+  font-size: 13px;
+  color: #5f6368;
+}
+
+/* Buttons on the right, stacked vertically */
+.login-banner-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;                          /* reduced gap between buttons */
+}
+
+.login-banner-buttons button {
+  min-width: 110px;                  /* slightly smaller buttons */
+  padding: 5px 12px;                 /* tighter padding */
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border: 1px solid #a9aeb6;         /* subtle border like ChatGPT */
+  transition: all 0.2s ease;
+}
+
+.login-banner-buttons .login-btn {
+  background-color: #e1edff;
+  color: #0b57d0;
+}
+
+.login-banner-buttons .signup-btn {
+  background-color: #e1edff;
+  color: #1f1f1f;
+}
+
+.login-banner-buttons button:hover {
+  filter: brightness(1.08);
+}
+
+/* Close button */
+.login-banner-close {
+  position: absolute;
+  top: 6px;          /* slightly closer to top */
+  right: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  color: #5f6368;
+  transition: color 0.2s;
+}
+.login-banner-close:hover { color: #0b57d0; }
+
+/* Responsive: stack buttons under text on small screens */
+@media (max-width: 768px) {
+  .login-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .login-banner-buttons {
+    width: 100%;
+    flex-direction: row;  
+    justify-content: flex-start;
+  }
+  .login-banner-buttons button { flex: 1; }
+}

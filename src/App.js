@@ -19,39 +19,41 @@ import "./stylesCss/ChatInput.css";
 import "./stylesCss/LoginModal.css";
 
 function App({ onManageProfile }) {
+  const { data, isLoading } = useGetMeQuery();
+  const user = data?.user || null;
+
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [showAvatar, setShowAvatar] = useState(false);
-  const [showSidebarProfile, setShowSidebarProfile] = useState(false); // <- lifted state
+  const [showSidebarProfile, setShowSidebarProfile] = useState(false);
   const [sidebarLoginOpen, setSidebarLoginOpen] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(true);
   const [sidebarRegisterOpen, setSidebarRegisterOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(true);
 
+  // Sidebar toggles
+  const toggleSidebar = () => setSidebarOpen((prev) => !prev);
+  const toggleAvatar = () => setShowAvatar((prev) => !prev);
+
+  // Manage Profile handler
+  const handleManageProfile = () => {
+    setShowAvatar(false);
+    setShowSidebarProfile(true);
+    if (typeof onManageProfile === "function") {
+      onManageProfile();
+    }
+  };
+
+  // --- Login/Register Modal Handlers ---
   const loginModalHandler = () => {
     setSidebarLoginOpen(true);
     setShowLoginModal(false);
-  }
+  };
 
   const registerHandler = () => {
     setSidebarRegisterOpen(true);
     setShowLoginModal(false);
-  }
+  };
 
-  const { data } = useGetMeQuery();
-  const user = data?.user;
-
-  const toggleSidebar = () => setSidebarOpen(prev => !prev);
-  const toggleAvatar = () => setShowAvatar(prev => !prev);
-
-  // Clicking Manage Profile anywhere
-  const handleManageProfile = () => {
-    setShowAvatar(false); // close avatar card if open
-    setShowSidebarProfile(true); // open profile in Sidebar
-    if (typeof onManageProfile === "function") {
-      onManageProfile();
-    }
-  }
-
-  // --- Click outside avatar to close ---
+  // --- Close Avatar on outside click ---
   const avatarRef = useRef(null);
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -63,65 +65,62 @@ function App({ onManageProfile }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showAvatar]);
 
-return (
-  <Router>
-    <div className="app-layout">
-      <Sidebar 
-        isOpen={isSidebarOpen} 
-        toggleSidebar={toggleSidebar} 
-        openProfile={showSidebarProfile} 
-        setOpenProfile={setShowSidebarProfile}
-        showLogin={sidebarLoginOpen}       // ✅ pass state
-        setShowLogin={setSidebarLoginOpen}  // ✅ pass setter
-        showRegister={sidebarRegisterOpen}
-        setShowRegister={setSidebarRegisterOpen}
-      />
-
-      <div className="main-content">
-        <Header 
-          toggleSidebar={toggleSidebar} 
-          user={user} 
-          onAvatarClick={toggleAvatar} 
+  return (
+    <Router>
+      <div className="app-layout">
+        <Sidebar
+          isOpen={isSidebarOpen}
+          toggleSidebar={toggleSidebar}
+          openProfile={showSidebarProfile}
+          setOpenProfile={setShowSidebarProfile}
+          showLogin={sidebarLoginOpen}
+          setShowLogin={setSidebarLoginOpen}
+          showRegister={sidebarRegisterOpen}
+          setShowRegister={setSidebarRegisterOpen}
         />
 
-        <div className="content-area">
-          <Routes>
-            <Route path="/" 
-              element={
-                <ChatInput 
-                  onLoginClick={() => setSidebarLoginOpen(true)} // pass setter
-                  onSignUpClick={() => setSidebarRegisterOpen(true)}
-                />} 
-            />
-          </Routes>
+        <div className="main-content">
+          <Header toggleSidebar={toggleSidebar} user={user} onAvatarClick={toggleAvatar} />
 
-          {showAvatar && 
-            <div ref={avatarRef}>
-              <Avatar 
-                user={user}
-                onClose={() => setShowAvatar(false)}
-                onClickManageProfile={handleManageProfile}
+          <div className="content-area">
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <ChatInput
+                    onLoginClick={() => setSidebarLoginOpen(true)}
+                    onSignUpClick={() => setSidebarRegisterOpen(true)}
+                  />
+                }
               />
-            </div>
-          }
+              {/* add more routes here */}
+            </Routes>
+
+            {showAvatar && (
+              <div ref={avatarRef}>
+                <Avatar
+                  user={user}
+                  onClose={() => setShowAvatar(false)}
+                  onClickManageProfile={handleManageProfile}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
 
-    {/* 🔹 Show Login Modal on top of everything */}
-    {!user && showLoginModal && (
-      <LoginModal 
-        // onClickLogin={() => setSidebarLoginOpen(true)}
-        onClickLogin={ loginModalHandler }
-        onClickSignUp={ registerHandler }
-        stayLoggedOut={ ()=> setShowLoginModal(false)}
-      />
-    )}
+      {/* 🔹 Show Login Modal only if user is guest */}
+      {!user && showLoginModal && (
+        <LoginModal
+          onClickLogin={loginModalHandler}
+          onClickSignUp={registerHandler}
+          stayLoggedOut={() => setShowLoginModal(false)}
+        />
+      )}
 
-    <Toaster position="top-center" reverseOrder={false} />
-  </Router>
-);
-
+      <Toaster position="top-center" reverseOrder={false} />
+    </Router>
+  );
 }
 
 export default App;

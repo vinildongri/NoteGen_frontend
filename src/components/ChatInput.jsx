@@ -149,7 +149,6 @@ const MessageRow = React.memo(({ msg }) => (
   </div>
 ));
 
-
 // ======================= ChatInput Component ======================= //
 const ChatInput = ({ onLoginClick, onSignUpClick }) => {
   const [text, setText] = useState("");
@@ -197,7 +196,7 @@ const ChatInput = ({ onLoginClick, onSignUpClick }) => {
     }
   }, [notesData, error]);
 
-  // Soft login prompt after 3 bot messages (only for guests)
+  // Soft login prompt after 2 bot messages
   useEffect(() => {
     if (isUserLoading) return;
     if (!user.isAuthenticated) {
@@ -241,11 +240,12 @@ const ChatInput = ({ onLoginClick, onSignUpClick }) => {
   return (
     <>
       <div className={`chat-input-container ${messages.length === 0 ? "centered" : ""}`}>
+        {/* Welcome message */}
         {messages.length === 0 && (
           <div className="welcome-screen">
             <h1
               style={{
-                background: "linear-gradient(to right, #0062ffff, #4289fcff, #6b9ff4ff)",
+                background: "linear-gradient(to right, #0062ff, #4289fc, #6b9ff4)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 padding: "20px",
@@ -257,6 +257,7 @@ const ChatInput = ({ onLoginClick, onSignUpClick }) => {
           </div>
         )}
 
+        {/* Messages */}
         <div className="messages-box">
           {messages.map((msg, idx) => (
             <MessageRow key={idx} msg={msg} />
@@ -278,6 +279,7 @@ const ChatInput = ({ onLoginClick, onSignUpClick }) => {
             </div>
           )}
 
+          {/* Login Banner */}
           {showLoginPrompt && (
             <div className="login-banner">
               <div className="login-banner-text">
@@ -301,6 +303,7 @@ const ChatInput = ({ onLoginClick, onSignUpClick }) => {
           <div ref={messagesEndRef} />
         </div>
 
+        {/* Input box */}
         <div className="input-wrapper">
           <textarea
             ref={textareaRef}
