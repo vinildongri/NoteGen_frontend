@@ -17,6 +17,7 @@ import "./stylesCss/SideBar.css";
 import "./stylesCss/Header.css";
 import "./stylesCss/ChatInput.css";
 import "./stylesCss/LoginModal.css";
+import ResetPassword from "./components/user/ResetPassword";
 
 function App({ onManageProfile }) {
   const { theme } = useContext(ThemeContext); // ✅ get theme
@@ -87,9 +88,15 @@ function App({ onManageProfile }) {
                     <ChatInput
                       onLoginClick={() => setSidebarLoginOpen(true)}
                       onSignUpClick={() => setSidebarRegisterOpen(true)}
+                      
                     />
                   }
                 />
+
+                  
+              {/* Reset Password  */}
+              <Route path="/password/reset/:token" element={<ResetPassword />} />
+
               </Routes>
 
               {showAvatar && (
