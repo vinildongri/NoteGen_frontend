@@ -14,14 +14,14 @@ const Header = ({ toggleSidebar, user, onAvatarClick }) => {
 
       <div className="header-right">
         <div
-          className="user-profile"
+          className="user-profile "
           onClick={() => onAvatarClick?.()}
           style={{ cursor: 'pointer' }}
         >
           {user?.avatar ? (
             <img src={user.avatar.url} alt={user.name} className="user-avatar" />
           ) : (
-            <div className="user-initial">
+            <div className="user-initial text-primary">
               {user?.name ? user.name.charAt(0) : 'G'}
             </div>
           )}

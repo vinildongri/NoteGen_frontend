@@ -1,94 +1,127 @@
 /* Background overlay */
 .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.75);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--modal-backdrop, rgba(0,0,0,0.75));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: background-color 0.3s ease;
 }
 
 /* Main modal container */
 .login-modal {
-    background-color: #ffffff; /* Changed to white */
-    color: #333; /* Changed to dark gray for readability on white */
-    padding: 2rem;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    box-shadow: 0 0 0 1px #ddd; /* Changed shadow color for white background */
+  background-color: var(--modal-bg, #ffffff);
+  color: var(--modal-text, #333);
+  padding: 2rem;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 0 0 1px var(--modal-border, #ddd);
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Title */
 .login-modal h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
 }
 
 /* Description */
 .login-modal p {
-    font-size: 0.9rem;
-    color: #777; /* Changed to a lighter gray */
-    margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--modal-desc, #777);
+  margin-bottom: 1.5rem;
+  transition: color 0.3s ease;
 }
 
 /* Buttons container */
 .modal-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.2rem;
 }
 
 /* Shared button styles */
 .login-button,
 .signup-button {
-    padding: 0.8rem 1rem;
-    border-radius: 999px; /* Pill shape restored */
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease, box-shadow 0.2s ease;
-    text-decoration: none;
-    display: block;
-    border: none;
+  padding: 0.8rem 1rem;
+  border-radius: 999px; /* pill shape */
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, color 0.3s ease;
+  text-decoration: none;
+  display: block;
+  border: none;
 }
 
 /* Login button */
 .login-button {
-    background-color: #005eff; /* Changed to blue */
-    color: #ffffff; /* Changed to white */
+  background-color: var(--login-btn-bg, #005eff);
+  color: var(--login-btn-text, #fff);
 }
-
-/* .login-button:hover {
-    background-color: #2980b9; 
-} */
 
 /* Sign up button */
 .signup-button {
-    background-color: #ffffff; /* Changed to white */
-    color: #3498db; /* Changed to blue */
-    border: 1px solid #3498db; /* Blue border */
+  background-color: var(--signup-btn-bg, #fff);
+  color: var(--signup-btn-text, #3498db);
+  border: 1px solid var(--signup-btn-border, #3498db);
 }
 
 .signup-button:hover {
-    background-color: #e8e8e8; /* Lighter gray hover */
+  background-color: var(--signup-btn-hover, #e8e8e8);
 }
 
 /* Stay logged out */
 .stay-logged-out {
-    background: none;
-    border: none;
-    color: #777; /* Changed to a lighter gray */
-    font-size: 0.95rem;
-    cursor: pointer;
-    text-decoration: underline;
-    padding-top: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--stay-logged-out, #777);
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding-top: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+/* ===================== Theme Variables ===================== */
+.dark-mode .login-modal,
+.dark-mode .modal-backdrop {
+  --modal-backdrop: rgba(0,0,0,0.85);
+  --modal-bg: #1f1f1f;
+  --modal-text: #fff;
+  --modal-border: #2a2a2a;
+  --modal-desc: #ccc;
+  --login-btn-bg: #2a6cff;
+  --login-btn-text: #fff;
+  --signup-btn-bg: #2a2a2a;
+  --signup-btn-text: #8ab4f8;
+  --signup-btn-border: #3498db;
+  --signup-btn-hover: #3a3a3a;
+  --stay-logged-out: #bbb;
+}
+
+.light-mode .login-modal,
+.light-mode .modal-backdrop {
+  --modal-backdrop: rgba(0,0,0,0.75);
+  --modal-bg: #ffffff;
+  --modal-text: #333;
+  --modal-border: #ddd;
+  --modal-desc: #777;
+  --login-btn-bg: #005eff;
+  --login-btn-text: #fff;
+  --signup-btn-bg: #ffffff;
+  --signup-btn-text: #3498db;
+  --signup-btn-border: #3498db;
+  --signup-btn-hover: #e8e8e8;
+  --stay-logged-out: #777;
 }

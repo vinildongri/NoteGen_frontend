@@ -92,7 +92,10 @@
 }
 .user-avatar { background: #eef4ff; color: #0b57d0; }
 .bot-avatar { background: #f0f4f9; color: #0b57d0; }
-.avatar-letter { font-weight: 500; }
+.avatar-letter { 
+  color: #0b57d0;
+  font-weight: 500; 
+}
 
 /* Animated bot ring */
 .avatar-ring {
@@ -174,7 +177,7 @@ pre::-webkit-scrollbar-thumb:hover { background: #888; }
 .input-wrapper {
   display: flex;
   flex-direction: column;
-  background-color: #f0f4f9;
+  /* background-color: #f0f4f9; */
   border: 1px solid transparent;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
   border-radius: 28px;
@@ -199,7 +202,7 @@ pre::-webkit-scrollbar-thumb:hover { background: #888; }
   resize: none;
   font-size: 16px;
   line-height: 1.5;
-  color: #1f1f1f;
+  /* color: #1f1f1f; */
   max-height: 200px;
   overflow-y: auto;
   padding: 8px 12px;
@@ -300,7 +303,7 @@ pre::-webkit-scrollbar-thumb:hover { background: #888; }
   .icon-button { height: 32px; width: 32px; }
   .tools-button { font-size: 12px; padding: 0 10px; }
   /* Keep input bar always visible above keyboard */
-  .input-wrapper { position: sticky; bottom: 0; background: #f0f4f9; z-index: 10; }
+  .input-wrapper { position: sticky; bottom: 0;  z-index: 10; }
 }
 
 /* ================= ChatGPT-Style Banner ================= */

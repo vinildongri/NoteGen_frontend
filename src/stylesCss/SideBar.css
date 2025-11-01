@@ -5,20 +5,16 @@
 /* ========================================= */
 
 .sidebar {
-  /* position: relative works best with a flexbox parent (.app-layout).
-    It keeps the sidebar in the flow, pushing main content aside. 
-  */
   position: relative; 
   height: 100vh;
   z-index: 10;
   display: flex;
   flex-direction: column;
-  background-color: #f0f4f9;
-  overflow-x: hidden; /* Hide content when collapsing */
+  background-color: var(--button-bg);
+  color: var(--text-color, #000); /* ✅ inherit text color */
+  overflow-x: hidden; 
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-
-  /* MODIFIED: Transition now includes 'transform' for the mobile slide animation */
-  transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transition: width 0.3s ease-in-out, transform 0.3s ease-in-out, background-color 0.3s, color 0.3s;
 }
 
 /* Width for the collapsed state on desktop (icon-only view) */
@@ -51,12 +47,14 @@
   align-items: center;
   width: 100%;
   border-radius: 10px;
+  color: inherit; /* ✅ inherit theme text color */
 }
 
 .new-chat-button {
-  background-color: #dde3ea;
+  background-color: var(--button-bg, #dde3ea); /* ✅ theme-aware */
   margin: 10px 5px;
-  white-space: nowrap; /* Prevents text from wrapping during transition */
+  white-space: nowrap;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .new-chat-button span {
@@ -66,7 +64,7 @@
 .section-title {
   font-weight: 500;
   padding: 0 15px 10px 15px;
-  color: #5f6368;
+  color: var(--section-title, #5f6368); /* ✅ theme-aware */
 }
 
 .menu-list {
@@ -82,10 +80,12 @@
   cursor: pointer;
   border-radius: 5px;
   white-space: nowrap;
+  color: inherit; /* ✅ theme-aware */
+  transition: background-color 0.3s;
 }
 
 .menu-item:hover {
-  background-color: #e8e8e8;
+  background-color: var(--hover-bg, #e8e8e8); /* ✅ theme-aware */
 }
 
 .menu-item .icon {
@@ -95,34 +95,50 @@
 .recent-item {
   padding: 5px 15px;
   font-size: 0.9em;
-  color: #3c4043;
+  color: var(--recent-text, #3c4043); /* ✅ theme-aware */
 }
-
 
 /* ==================================================================== */
 /* ====   MOBILE & TABLET STYLES (Screen width < 768px)           ==== */
 /* ==================================================================== */
 @media (max-width: 768px) {
-  
-  /* Override positioning to create an overlay that slides over content */
   .sidebar {
     position: fixed;
-    z-index: 2000; /* Ensure it's on top of everything */
-    
-    /* Hide the sidebar off-screen by default on mobile */
+    z-index: 2000;
     transform: translateX(-100%);
   }
-  
-  /* On mobile, the sidebar has a single, fixed width when open.
-     This disables the desktop hover-to-expand effect. */
+
   .sidebar,
   .sidebar.collapsed,
   .sidebar:not(.collapsed) {
     width: 280px; 
   }
 
-  /* This class, added via JavaScript, brings the sidebar into view */
   .sidebar.open {
     transform: translateX(0);
   }
+}
+
+/* ================================ */
+/* ==== DARK MODE VARIABLES  ====== */
+/* ================================ */
+.sidebar.dark-mode {
+  --sidebar-bg: #1f1f1f;
+  --text-color: #fff;
+  --button-bg: #2a2a2a;
+  --section-title: #ccc;
+  --hover-bg: #333;
+  --recent-text: #bbb;
+}
+
+/* ================================ */
+/* ==== LIGHT MODE VARIABLES ====== */
+/* ================================ */
+.sidebar.light-mode {
+  --sidebar-bg: #f0f4f9;
+  --text-color: #000;
+  --button-bg: #dde3ea;
+  --section-title: #5f6368;
+  --hover-bg: #e8e8e8;
+  --recent-text: #3c4043;
 }

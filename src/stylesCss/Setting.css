@@ -9,7 +9,7 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
   display: flex;
-  justify-content: center;   /* ✅ default: center (mobile/tablet) */
+  justify-content: center;   /* default: center (mobile/tablet) */
   align-items: center;
   z-index: 1000;
   padding: 1rem;
@@ -18,15 +18,16 @@
 
 /* Card */
 .setting-card {
-  background: linear-gradient(145deg, #ffffff, #e6f0f7);
+  background-color: var(--setting-card-bg, #ffffff); /* theme-aware */
   border-radius: 15px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
   width: 100%;
   max-width: 350px;
   padding: 30px 20px;
   position: relative;
-  color: #1a1a1a;
+  color: var(--setting-text, #1a1a1a); /* theme-aware */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 /* Close Button */
@@ -36,12 +37,12 @@
   right: 15px;
   background: none;
   border: none;
-  color: #555;
+  color: var(--setting-text, #555); /* theme-aware */
   cursor: pointer;
   transition: color 0.3s;
 }
 .close-btn:hover {
-  color: #ff4c4c;
+  color: var(--setting-hover, #ff4c4c); /* theme-aware hover */
 }
 
 /* Title */
@@ -49,9 +50,9 @@
   text-align: center;
   font-size: 1.6rem;
   margin-bottom: 20px;
-  border-bottom: 1px solid #cbd5e1;
+  border-bottom: 1px solid var(--setting-border, #cbd5e1); /* theme-aware */
   padding-bottom: 10px;
-  color: #0b3d91;
+  color: var(--setting-title, #0b3d91); /* theme-aware */
   font-weight: 600;
 }
 
@@ -71,17 +72,17 @@
   border-radius: 12px;
   cursor: pointer;
   transition: background 0.3s, transform 0.2s;
-  color: #1a1a1a;
+  color: var(--setting-text, #1a1a1a); /* theme-aware */
 }
 .setting-item:hover {
-  background: #cde6f7;
+  background-color: var(--setting-hover-bg, #cde6f7); /* theme-aware */
   transform: translateX(5px);
 }
 
 /* Icons */
 .icon {
   font-size: 1.2rem;
-  color: #0b3d91;
+  color: var(--setting-icon, #0b3d91); /* theme-aware */
 }
 
 /* ===================== Responsive ===================== */
@@ -118,16 +119,37 @@
   .icon { font-size: 0.9rem; }
 }
 
-/* ===================== Desktop Only (≥1025px) ===================== */
+/* Desktop Only (≥1025px) */
 @media (min-width: 1025px) {
   .setting-overlay {
     justify-content: flex-start;   /* align left */
     align-items: flex-end;         /* align bottom */
-    padding: 20px;                 /* gap from bottom */
+    padding: 20px;
   }
 
   .setting-card {
-    margin-left: 100px;  /* ✅ 100px gap from the left */
-    margin-bottom: 20px; /* ✅ small gap from bottom */
+    margin-left: 100px;  /* 100px gap from the left */
+    margin-bottom: 20px; /* small gap from bottom */
   }
+}
+
+/* ===================== Theme Variables ===================== */
+.dark-mode .setting-card {
+  --setting-card-bg: #1f1f1f;
+  --setting-text: #ffffff;
+  --setting-title: #ffffff;
+  --setting-border: #333;
+  --setting-hover-bg: #333;
+  --setting-hover: #ff4c4c;
+  --setting-icon: #ccc;
+}
+
+.light-mode .setting-card {
+  --setting-card-bg: #ffffff;
+  --setting-text: #1a1a1a;
+  --setting-title: #0b3d91;
+  --setting-border: #cbd5e1;
+  --setting-hover-bg: #cde6f7;
+  --setting-hover: #ff4c4c;
+  --setting-icon: #0b3d91;
 }

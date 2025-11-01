@@ -66,7 +66,7 @@ const Setting = ({ onClose, onLogin, onOpenProfile }) => {
             )}
 
             <li className="setting-item">
-              <FiMoon className="icon" /> <DarkModeToggle />
+              <DarkModeToggle />
             </li>
             <li className="setting-item">
               <FiHelpCircle className="icon" /> <span>Help</span>

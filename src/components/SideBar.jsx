@@ -29,6 +29,11 @@ const Sidebar = ({ isOpen, toggleSidebar, openProfile, setOpenProfile, showLogin
   const [showUpdatePassword, setShowUpdatePassword] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
 
+  const handleForgotPassword = () => {
+    setShowLogin(false);
+    setShowForgotPassword(true);
+  };
+
   const handleUpdatePassword = () => {
     setShowUpdatePassword(true);
   };
@@ -147,7 +152,7 @@ const Sidebar = ({ isOpen, toggleSidebar, openProfile, setOpenProfile, showLogin
         <Login
           onClose={() => setShowLogin(false)}
           onNewUSer={handleRegisterClick}
-          onForgotPassword={() => setShowLogin(false)}
+          onForgotPassword={handleForgotPassword}
           // onClickLogin={handleLoginClick}
         />
       )}

@@ -1,20 +1,37 @@
+/* ================= Avatar Card Overlay & Container ================= */
+.avatar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--avatar-overlay, rgba(0,0,0,0.3));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: background 0.3s ease;
+}
+
 .avatar-card {
-  position: absolute;         /* attach relative to header */
-  top: 60px;                  /* below header */
-  right: 20px;                /* aligned to avatar button */
+  position: absolute;
+  top: 60px;
+  right: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   padding: 15px 20px;
   border-radius: 12px;
-  background-color: #fff;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  background-color: var(--avatar-card-bg, #fff);
+  box-shadow: 0 8px 24px var(--avatar-card-shadow, rgba(0,0,0,0.2));
   min-width: 220px;
   z-index: 1000;
   font-family: 'Segoe UI', Roboto, sans-serif;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
+/* Header & Close Button */
 .avatar-header {
   width: 100%;
   display: flex;
@@ -26,14 +43,21 @@
   background: none;
   font-size: 18px;
   cursor: pointer;
+  color: var(--avatar-close, #555);
+  transition: color 0.3s;
 }
 
+.close-btn:hover {
+  color: var(--avatar-close-hover, #000);
+}
+
+/* Avatar Initials Circle */
 .avatar-initials {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1a73e8, #4a90e2);
-  color: #fff;
+  background: var(--avatar-initials-bg, linear-gradient(135deg, #1a73e8, #4a90e2));
+  color: var(--avatar-initials-color, #fff);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,6 +65,7 @@
   font-size: 20px;
 }
 
+/* Details */
 .avatar-details {
   display: flex;
   flex-direction: column;
@@ -51,58 +76,87 @@
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #111;
+  color: var(--avatar-name, #111);
 }
 
 .avatar-email {
   margin: 0;
   font-size: 14px;
-  color: #555;
+  color: var(--avatar-email, #555);
 }
 
-.avatar-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.3); /* semi-transparent background */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
+/* Button */
 .btn {
   display: inline-block;
   padding: 12px 28px;
-  border: 1px solid rgba(255,255,255,0.3); /* subtle default border */
+  border: 1px solid var(--btn-border, rgba(255,255,255,0.3));
   border-radius: 8px;
-
-  background: linear-gradient(135deg, #89B4F8, #C58AF9);
-  color: white;
+  background: var(--btn-bg, linear-gradient(135deg, #89B4F8, #C58AF9));
+  color: var(--btn-text, #fff);
   font-family: "Google Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.4px;
   text-align: center;
-
   cursor: pointer;
   text-decoration: none;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: box-shadow 0.15s ease-in-out, border-color 0.15s ease-in-out;
+  box-shadow: 0 2px 4px var(--btn-shadow, rgba(0,0,0,0.1));
+  transition: box-shadow 0.15s ease-in-out, border-color 0.15s ease-in-out, background 0.3s;
 }
 
 .btn:hover {
-  box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+  box-shadow: 0 3px 6px var(--btn-shadow-hover, rgba(0,0,0,0.12));
 }
 
 .btn:active {
-  border-color: #1a73e8; /* Blue border on click */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-color: var(--btn-active-border, #1a73e8);
+  box-shadow: 0 2px 4px var(--btn-shadow, rgba(0,0,0,0.1));
 }
 
 .btn:focus-visible {
-  outline: 2px solid #89B4F8;
+  outline: 2px solid var(--btn-focus, #89B4F8);
   outline-offset: 3px;
+}
+
+/* ================= Dark / Light Theme Variables ================= */
+.dark-mode .avatar-overlay,
+.dark-mode .avatar-card {
+  --avatar-overlay: rgba(0,0,0,0.6);
+  --avatar-card-bg: #1f1f1f;
+  --avatar-card-shadow: rgba(0,0,0,0.7);
+  --avatar-close: #ccc;
+  --avatar-close-hover: #fff;
+  --avatar-initials-bg: linear-gradient(135deg, #3a6ff7, #0e2b40);
+  --avatar-initials-color: #fff;
+  --avatar-name: #fff;
+  --avatar-email: #bbb;
+
+  --btn-bg: linear-gradient(135deg, #3a6ff7, #6c9eff);
+  --btn-text: #fff;
+  --btn-border: rgba(255,255,255,0.3);
+  --btn-shadow: rgba(0,0,0,0.2);
+  --btn-shadow-hover: rgba(0,0,0,0.3);
+  --btn-active-border: #0e2b40;
+  --btn-focus: #3a6ff7;
+}
+
+.light-mode .avatar-overlay,
+.light-mode .avatar-card {
+  --avatar-overlay: rgba(0,0,0,0.3);
+  --avatar-card-bg: #fff;
+  --avatar-card-shadow: rgba(0,0,0,0.2);
+  --avatar-close: #555;
+  --avatar-close-hover: #000;
+  --avatar-initials-bg: linear-gradient(135deg, #1a73e8, #4a90e2);
+  --avatar-initials-color: #fff;
+  --avatar-name: #111;
+  --avatar-email: #555;
+
+  --btn-bg: linear-gradient(135deg, #89B4F8, #C58AF9);
+  --btn-text: #fff;
+  --btn-border: rgba(255,255,255,0.3);
+  --btn-shadow: rgba(0,0,0,0.1);
+  --btn-shadow-hover: rgba(0,0,0,0.12);
+  --btn-active-border: #1a73e8;
+  --btn-focus: #89B4F8;
 }

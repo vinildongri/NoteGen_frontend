@@ -5,22 +5,26 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: var(--update-overlay, rgba(0,0,0,0.5));
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  transition: background 0.3s ease;
 }
 
 /* Container (card) */
 .update-profile-container {
-  background-color: #fff;
+  background-color: var(--update-card-bg, #fff);
   border-radius: 12px;
   padding: 30px 25px;
   width: 380px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 25px var(--update-shadow, rgba(0,0,0,0.2));
   position: relative;
   animation: fadeIn 0.3s ease-in-out;
+  color: var(--update-text, #000);
+  transition: all 0.3s ease;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Close button */
@@ -33,12 +37,12 @@
   font-size: 22px;
   font-weight: bold;
   cursor: pointer;
-  color: #555;
-  transition: color 0.2s;
+  color: var(--update-close, #555);
+  transition: color 0.3s ease;
 }
 
 .close-btn:hover {
-  color: #000;
+  color: var(--update-close-hover, #000);
 }
 
 /* Title */
@@ -47,6 +51,7 @@
   text-align: center;
   font-size: 22px;
   font-weight: 600;
+  color: var(--update-title, #007bff);
 }
 
 /* Form */
@@ -66,21 +71,23 @@
   margin-bottom: 6px;
   font-size: 14px;
   font-weight: 500;
-  color: #333;
+  color: var(--update-label, #333);
 }
 
 .form-group input {
   padding: 10px 12px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--update-input-border, #ccc);
   border-radius: 6px;
   font-size: 15px;
   outline: none;
+  background-color: var(--update-input-bg, #fff);
+  color: var(--update-input-text, #000);
   transition: border 0.3s, box-shadow 0.3s;
 }
 
 .form-group input:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 6px rgba(0,123,255,0.3);
+  border-color: var(--update-input-focus, #007bff);
+  box-shadow: 0 0 6px var(--update-input-shadow, rgba(0,123,255,0.3));
 }
 
 /* Submit button */
@@ -88,19 +95,60 @@
   padding: 10px 15px;
   border: none;
   border-radius: 6px;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--update-btn-bg, #007bff);
+  color: var(--update-btn-text, #fff);
   font-size: 16px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s ease;
 }
 
 .update-btn:hover {
-  background-color: #0056b3;
+  background-color: var(--update-btn-hover, #0056b3);
 }
 
 /* Animation */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-15px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================== Theme Variables ===================== */
+.dark-mode .update-profile-wrapper,
+.dark-mode .update-profile-container {
+  --update-overlay: rgba(0,0,0,0.7);
+  --update-card-bg: #1f1f1f;
+  --update-shadow: rgba(0,0,0,0.6);
+  --update-text: #fff;
+  --update-title: #4da3ff;
+  --update-close: #ccc;
+  --update-close-hover: #fff;
+  --update-label: #ddd;
+  --update-input-bg: #2a2a2a;
+  --update-input-text: #fff;
+  --update-input-border: #444;
+  --update-input-focus: #4da3ff;
+  --update-input-shadow: rgba(77,163,255,0.3);
+  --update-btn-bg: #4da3ff;
+  --update-btn-text: #fff;
+  --update-btn-hover: #2e7bda;
+}
+
+.light-mode .update-profile-wrapper,
+.light-mode .update-profile-container {
+  --update-overlay: rgba(0,0,0,0.5);
+  --update-card-bg: #ffffff;
+  --update-shadow: rgba(0,0,0,0.2);
+  --update-text: #000;
+  --update-title: #007bff;
+  --update-close: #555;
+  --update-close-hover: #000;
+  --update-label: #333;
+  --update-input-bg: #fff;
+  --update-input-text: #000;
+  --update-input-border: #ccc;
+  --update-input-focus: #007bff;
+  --update-input-shadow: rgba(0,123,255,0.3);
+  --update-btn-bg: #007bff;
+  --update-btn-text: #fff;
+  --update-btn-hover: #0056b3;
 }

@@ -7,8 +7,13 @@ export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
 
   useEffect(() => {
-    // Apply theme globally via data-bs-theme
+    // Apply theme globally via data-bs-theme (Bootstrap components if any)
     document.documentElement.setAttribute("data-bs-theme", theme);
+
+    // Apply body class for background and text color
+    document.body.className = theme;
+
+    // Save theme to localStorage
     localStorage.setItem("theme", theme);
   }, [theme]);
 
@@ -18,7 +23,10 @@ export const ThemeProvider = ({ children }) => {
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
+      {/* Wrap children in a top-level div to apply background inheritance */}
+      <div className={theme === "dark" ? "dark-mode" : "light-mode"}>
+        {children}
+      </div>
     </ThemeContext.Provider>
   );
 };

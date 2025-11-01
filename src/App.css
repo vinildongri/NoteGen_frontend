@@ -1,5 +1,60 @@
 /* src/App.css */
 
+
+/* Global CSS variables */
+:root {
+  --bg-color: #f0f4f9;
+  --text-color: #000;
+  --button-bg: #dde3ea;
+  --hover-bg: #e8e8e8;
+  --header-bg: #f0f4f9;
+  --header-text: #3c4043;
+  --avatar-bg: #8ab4f8;
+  --avatar-text: #fff;
+}
+
+.dark-mode {
+  --bg-color: #121212;
+  --text-color: #fff;
+  --button-bg: #2a2a2a;
+  --hover-bg: #333;
+  --header-bg: #1f1f1f;
+  --header-text: #fff;
+  --avatar-bg: #444;
+  --avatar-text: #fff;
+}
+
+.light-mode {
+  --bg-color: #f0f4f9;
+  --text-color: #000;
+  --button-bg: #dde3ea;
+  --hover-bg: #e8e8e8;
+  --header-bg: #f0f4f9;
+  --header-text: #3c4043;
+  --avatar-bg: #8ab4f8;
+  --avatar-text: #fff;
+}
+
+/* Global text color */
+body, h1, h2, h3, h4, h5, h6, p, li, a {
+  color: var(--text-color);
+}
+
+
+/* Dark mode text */
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6,
+body.dark p,
+/* body.dark span, */
+body.dark li,
+body.dark a {
+  color: #ffffff;
+}
+
 /*
   Defines the primary layout for the entire application.
   It's a flex container that places the Sidebar and the .main-content
@@ -9,7 +64,7 @@
   display: flex;
   height: 100vh;
   width: 100vw;
-  background-color: #f0f4f9;
+  /* background-color: #f0f4f9; */
   /* Prevents the entire browser page from having a scrollbar,
      as scrolling is handled internally. */
   overflow: hidden;
@@ -44,3 +99,5 @@
     padding: 1rem;
   }
 }
+
+

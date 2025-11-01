@@ -5,22 +5,25 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4); /* dark background */
+  background: var(--register-backdrop, rgba(0, 0, 0, 0.4));
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  transition: background 0.3s ease;
 }
 
 /* Card */
 .register-card {
-  position: relative;   /* Needed for close button positioning */
-  background: #fff;
+  position: relative;
+  background: var(--register-bg, #fff);
   border-radius: 12px;
   padding: 2rem;
   width: 350px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px var(--register-shadow, rgba(0,0,0,0.2));
   animation: fadeIn 0.3s ease-in-out;
+  color: var(--register-text, #222);
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Heading */
@@ -29,7 +32,7 @@
   font-weight: 600;
   text-align: center;
   margin-bottom: 1.5rem;
-  color: #222;
+  color: var(--register-heading, #222);
   font-family: "Poppins", sans-serif;
 }
 
@@ -44,22 +47,24 @@
   font-size: 0.9rem;
   font-weight: 500;
   margin-bottom: 0.4rem;
-  color: #333;
+  color: var(--register-label, #333);
 }
 
 /* Inputs */
 .register-form input {
   padding: 0.7rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--register-input-border, #ccc);
   border-radius: 6px;
   margin-bottom: 1rem;
   font-size: 0.95rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background-color: var(--register-input-bg, #fff);
+  color: var(--register-input-text, #000);
 }
 
 .register-form input:focus {
-  border-color: #0e2b40;
-  box-shadow: 0 0 5px rgba(14, 43, 64, 0.3);
+  border-color: var(--register-input-focus, #0e2b40);
+  box-shadow: 0 0 5px var(--register-input-shadow, rgba(14,43,64,0.3));
   outline: none;
 }
 
@@ -68,8 +73,8 @@
   padding: 0.8rem;
   border: none;
   border-radius: 6px;
-  background: linear-gradient(45deg, #061b31, #0e2b40);
-  color: #fff;
+  background: var(--register-btn-bg, linear-gradient(45deg, #061b31, #0e2b40));
+  color: var(--register-btn-text, #fff);
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -81,7 +86,7 @@
 }
 
 .register-btn:active {
-  transform: scale(0.97); /* click effect */
+  transform: scale(0.97);
 }
 
 /* Close Button */
@@ -93,13 +98,13 @@
   border: none;
   font-size: 1.3rem;
   cursor: pointer;
-  color: #444;
+  color: var(--register-close, #444);
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .register-close-btn:hover {
   transform: rotate(90deg);
-  color: #000;
+  color: var(--register-close-hover, #000);
 }
 
 /* Animation */
@@ -112,4 +117,43 @@
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* ===================== Theme Variables ===================== */
+.dark-mode .register-overlay,
+.dark-mode .register-card {
+  --register-backdrop: rgba(0,0,0,0.75);
+  --register-bg: #1f1f1f;
+  --register-shadow: rgba(0,0,0,0.6);
+  --register-text: #fff;
+  --register-heading: #fff;
+  --register-label: #ccc;
+  --register-input-bg: #2a2a2a;
+  --register-input-text: #fff;
+  --register-input-border: #444;
+  --register-input-focus: #5a8cff;
+  --register-input-shadow: rgba(90,140,255,0.2);
+  --register-btn-bg: linear-gradient(45deg, #2a6cff, #1a3f70);
+  --register-btn-text: #fff;
+  --register-close: #ccc;
+  --register-close-hover: #fff;
+}
+
+.light-mode .register-overlay,
+.light-mode .register-card {
+  --register-backdrop: rgba(0,0,0,0.4);
+  --register-bg: #fff;
+  --register-shadow: rgba(0,0,0,0.2);
+  --register-text: #222;
+  --register-heading: #222;
+  --register-label: #333;
+  --register-input-bg: #fff;
+  --register-input-text: #000;
+  --register-input-border: #ccc;
+  --register-input-focus: #0e2b40;
+  --register-input-shadow: rgba(14,43,64,0.3);
+  --register-btn-bg: linear-gradient(45deg, #061b31, #0e2b40);
+  --register-btn-text: #fff;
+  --register-close: #444;
+  --register-close-hover: #000;
 }

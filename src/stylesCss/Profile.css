@@ -14,12 +14,14 @@
 
 /* Profile card */
 .profile-card {
-  background-color: #fff;
+  background-color: var(--profile-bg, #ffffff); /* theme-aware */
   border-radius: 12px;
   padding: 30px 25px;
   width: 350px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   position: relative;
+  color: var(--profile-text, #1a1a1a); /* theme-aware */
+  transition: background-color 0.3s, color 0.3s;
 }
 
 /* Close button */
@@ -31,6 +33,11 @@
   border: none;
   font-size: 20px;
   cursor: pointer;
+  color: var(--profile-text, #555); /* theme-aware */
+  transition: color 0.3s;
+}
+.profile-close-btn:hover {
+  color: var(--profile-hover, #ff4c4c); /* theme-aware hover */
 }
 
 /* Title */
@@ -39,6 +46,7 @@
   text-align: center;
   font-size: 22px;
   font-weight: 600;
+  color: var(--profile-title, #0b3d91); /* theme-aware */
 }
 
 /* Profile list */
@@ -61,19 +69,40 @@
   width: 100%;
   border: none;
   border-radius: 6px;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--profile-button-bg, #007bff); /* theme-aware */
+  color: var(--profile-button-text, #ffffff); /* theme-aware */
   font-size: 16px;
   cursor: pointer;
   transition: background 0.3s;
 }
 
 .profile-update-button:hover {
-  background-color: #0056b3;
+  background-color: var(--profile-button-hover, #0056b3); /* theme-aware hover */
 }
 
 /* Icon spacing */
 .profile-update-button svg {
   margin-right: 8px;
   font-size: 18px;
+}
+
+/* ===================== Theme Variables ===================== */
+.dark-mode .profile-card {
+  --profile-bg: #1f1f1f;
+  --profile-text: #ffffff;
+  --profile-title: #ffffff;
+  --profile-hover: #ff4c4c;
+  --profile-button-bg: #2a2a2a;
+  --profile-button-text: #ffffff;
+  --profile-button-hover: #444444;
+}
+
+.light-mode .profile-card {
+  --profile-bg: #ffffff;
+  --profile-text: #1a1a1a;
+  --profile-title: #0b3d91;
+  --profile-hover: #ff4c4c;
+  --profile-button-bg: #007bff;
+  --profile-button-text: #ffffff;
+  --profile-button-hover: #0056b3;
 }

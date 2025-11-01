@@ -8,6 +8,7 @@ import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { FiPlus, FiArrowUp, FiMic, FiSliders } from "react-icons/fi";
 import SearchPdf from "./SearchPdf.jsx";
 import { PDF_SUMMARY_HEADING } from "../constants.jsx";
+import MicInput from "./MicInput.jsx";
 
 // Lazy load SyntaxHighlighter
 const SyntaxHighlighter = lazy(() =>
@@ -161,8 +162,7 @@ const ChatInput = ({ onLoginClick, onSignUpClick }) => {
   const textareaRef = useRef(null);
   const messagesEndRef = useRef(null);
 
-  // Get current user
-  const { data: meData, isLoading: isUserLoading } = useGetMeQuery();
+  const { data: meData, isLoading: isUserLoading, refetch } = useGetMeQuery();
   const user = meData?.user
     ? { ...meData.user, isAuthenticated: true }
     : { name: "Guest", isAuthenticated: false };
@@ -187,14 +187,37 @@ const ChatInput = ({ onLoginClick, onSignUpClick }) => {
     if (notesData?.result) {
       setMessages((prev) => [...prev, { role: "bot", content: notesData.result, name: "NoteGen" }]);
     }
+
     if (error) {
       let errorMessage = "⚠️ Error fetching response";
-      if (error.status === "FETCH_ERROR") errorMessage = "⚠️ Network error – check your connection.";
-      else if (error.status === 500) errorMessage = "⚠️ Server error – please try again later.";
-      else if (error.data?.message) errorMessage = `⚠️ ${error.data.message}`;
+
+      if (error?.status === "FETCH_ERROR") {
+        errorMessage = "⚠️ Network error – check your connection.";
+      } else if (error?.status === 401) {
+        errorMessage = "⚠️ Session expired. Please log in again.";
+        localStorage.removeItem("token");
+        refetch();
+      } else if (error?.status === 500) {
+        errorMessage = "⚠️ Server error – please try again later.";
+      } else if (error?.data?.message) {
+        try {
+          const parsed = JSON.parse(error.data.message);
+          if (parsed?.error?.status === "RESOURCE_EXHAUSTED") {
+            const retryInfo = parsed.error?.details?.find(
+              (d) => d["@type"] === "type.googleapis.com/google.rpc.RetryInfo"
+            );
+            errorMessage = `⚠️ Quota exceeded. Retry after ${retryInfo?.retryDelay || "60s"} or upgrade your plan.`;
+          } else {
+            errorMessage = `⚠️ ${parsed?.error?.message || error.data.message}`;
+          }
+        } catch {
+          errorMessage = `⚠️ ${error.data.message}`;
+        }
+      }
+
       setMessages((prev) => [...prev, { role: "bot", content: errorMessage, name: "NoteGen" }]);
     }
-  }, [notesData, error]);
+  }, [notesData, error, refetch]);
 
   // Soft login prompt after 2 bot messages
   useEffect(() => {
@@ -211,11 +234,17 @@ const ChatInput = ({ onLoginClick, onSignUpClick }) => {
   const handleSubmit = useCallback(async () => {
     if (!text.trim()) return;
     setMessages((prev) => [...prev, { role: "user", content: text, name: user.name }]);
+
     try {
-      await createNotes({ messages: [...messages, { role: "user", content: text, name: user.name }] }).unwrap();
+      const token = localStorage.getItem("token");
+      await createNotes({
+        messages: [...messages, { role: "user", content: text, name: user.name }],
+        headers: { Authorization: token ? `Bearer ${token}` : "" },
+      }).unwrap();
+
       setText("");
     } catch (err) {
-      console.log("API Error:", err);
+      console.error("API Error:", err);
     }
   }, [text, messages, user.name, createNotes]);
 
@@ -330,9 +359,7 @@ const ChatInput = ({ onLoginClick, onSignUpClick }) => {
                   <FiArrowUp size={22} />
                 </button>
               ) : (
-                <button className="icon-button">
-                  <FiMic size={22} />
-                </button>
+                <MicInput setText={setText} />
               )}
             </div>
           </div>
