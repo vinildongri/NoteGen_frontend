@@ -233,16 +233,21 @@ const ChatInput = ({ onLoginClick, onSignUpClick }) => {
   // Handle submit
   const handleSubmit = useCallback(async () => {
     if (!text.trim()) return;
-    setMessages((prev) => [...prev, { role: "user", content: text, name: user.name }]);
+    
+    // 1. Capture the current text
+    const messageToSend = text;
+    
+    // 2. Clear the state immediately to break the loop!
+    setText(""); 
+
+    setMessages((prev) => [...prev, { role: "user", content: messageToSend, name: user.name }]);
 
     try {
       const token = localStorage.getItem("token");
       await createNotes({
-        messages: [...messages, { role: "user", content: text, name: user.name }],
+        messages: [...messages, { role: "user", content: messageToSend, name: user.name }],
         headers: { Authorization: token ? `Bearer ${token}` : "" },
       }).unwrap();
-
-      setText("");
     } catch (err) {
       console.error("API Error:", err);
     }
@@ -263,8 +268,11 @@ const ChatInput = ({ onLoginClick, onSignUpClick }) => {
   }, [pdfText]);
 
   useEffect(() => {
-    if (text && text.includes(PDF_SUMMARY_HEADING)) handleSubmit();
-  }, [text, handleSubmit]);
+    if (text && text.includes(PDF_SUMMARY_HEADING)) {
+      handleSubmit();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [text]); // Only depend on 'text'
 
   return (
     <>
